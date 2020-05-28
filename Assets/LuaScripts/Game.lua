@@ -1,9 +1,4 @@
-Game = {};
-local function __G__TRACKBACK__(msg)
-	error(msg);
-end
-G_WeakTable = {};
-setmetatable(G_WeakTable,{__mode="k"});
+Game = {}
 
 local function Main()
     require("GameInit")
