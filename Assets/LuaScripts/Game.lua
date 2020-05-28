@@ -15,26 +15,15 @@ local function Main()
                 end
             });
     end
-
-    --管理器-- 
-	math.randomseed(tostring(os.time()):reverse():sub(1,7))
+    --设置随机数种子
+	math.randomseed(tostring(os.time()):reverse():sub(1,7)) 
 
     --GC设置
     GCTool.setup()
 end
 
-function OnLoginWithNetwork()
-    SceneMgr:SwitchScene(SceneID.LoginWithNetworkScene)
-end
-function OnLobby()
-	SceneMgr:SwitchScene(SceneID.Lobby)
-end
-function OnGame()
-	--SceneMgr:SwitchScene(SceneID.Game)
-end
-
 --初始化--
-function OnInitOK()
+function Game.Start()
     Main();
 end
 
@@ -42,32 +31,7 @@ function OnApplicationQuit()
     
 end
 
-
-require("Tools.ProfilerSampler")
-UWABeginSample = UWALuaHelper.PushSample
-UWAEndSample = UWALuaHelper.PopSample
-function Game.OnUpdate()
-    UWABeginSample("GameOnUpdate")
-    BeginSample__Base("GameOnUpdate")
-    SceneMgr:OnUpdate()
-    --always update
-    BeginSample__Base("MemDataMgrOnUpdate")
-    MemDataMgr:OnUpdateFrame()
-    EndSample__Base()
-    EndSample__Base()
-    UWAEndSample()
-end
-
---svrTime 表示上次ping的服务器时刻
---serverDelateTime 表示上次pong的客户端时刻
-function Game.SyncServerTime(svrTime)
-	if svrTime <= 0 then return end
-    Game.svrTime = svrTime
-    Game.serverDelateTime = os.time()
-end
-
-function Game.GetSvrTime()
-    return Game.svrTime + math.floor(os.time() - (Game.serverDelateTime or os.time()))
+function OnUpdate(deltaTime)
 end
 
 return Game

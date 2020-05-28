@@ -8,7 +8,7 @@ using XLua;
 public class XLuaManager : MonoSingleton<XLuaManager>
 {
     public  const string luaScriptsFolder = "LuaScripts";
-    private const string gameMainScriptName = "GameMain";
+    private const string gameMainScriptName = "Game";
     private const string hotfixScriptName = "Hotfix";
     
     private LuaEnv _luaEnv;
@@ -34,8 +34,8 @@ public class XLuaManager : MonoSingleton<XLuaManager>
     public void StartGame()
     {
         LoadScript(gameMainScriptName);
-        SafeDoString("GameMain.Start()");
-        _luaUpdate = luaEnv.Global.Get<Action<float>>("Update");
+        SafeDoString("Game.Start()");
+        _luaUpdate = luaEnv.Global.Get<Action<float>>("OnUpdate");
     }
 
     private void LoadScript(string scriptName)
