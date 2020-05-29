@@ -64,6 +64,7 @@ public class GameUIManager : MonoSingleton<GameUIManager>
             {
                 sb.CtrlBase.ctrlCanvas.enabled = true;
             }
+            sb.OnShow();
             // 处理最上层界面
             if (sb.CtrlBase.mHideOtherScreenWhenThisOnTop)
             {
@@ -75,6 +76,7 @@ public class GameUIManager : MonoSingleton<GameUIManager>
             return sb;
         }
         sb = (ScreenBase)Activator.CreateInstance(type, param);
+        sb.OnShow();
 
         _typeScreens.Add(type, sb);
         sb.SetOpenOrder(_uiOpenOrder); // 设置打开序号

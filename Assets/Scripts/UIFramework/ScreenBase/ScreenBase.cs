@@ -44,8 +44,9 @@ public class ScreenBase
         GameUIManager.GetInstance().AddUI(this);
 
     }
-    // 脚本处理完成
-    virtual protected void OnLoadSuccess()
+    
+    // 界面初始化完成
+    protected virtual void OnLoadSuccess()
     {
         // 注册适配监听事件
         _ctrlBase.AutoRelease(EventManager.ScreenResolutionEvt.Subscribe(UIAdapt));
@@ -53,13 +54,20 @@ public class ScreenBase
         if (_ctrlBase.mUseMask)
             MaskScreenManager.GetInstance().Show(this);
     }
-
-    virtual protected void UIAdapt(Vector2Int res)
+    
+    //界面每次显示都会调用此方法
+    public virtual void OnShow()
+    {
+        
+    }
+    
+    protected virtual void UIAdapt(Vector2Int res)
     {
 
     }
-
-    virtual public void OnClose()
+    
+    
+    public virtual void OnClose()
     {
         GameUIManager.GetInstance().RemoveUI(this);
     }
@@ -67,7 +75,7 @@ public class ScreenBase
     /// <summary>
     /// 界面打开的时候会根据选项自动给界面加上背景遮罩层，点击遮罩层传递的事件 可重写
     /// </summary>
-    virtual public void OnClickMaskArea()
+    public virtual void OnClickMaskArea()
     {
         OnClose();
     }
@@ -98,7 +106,7 @@ public class ScreenBase
         _ctrlBase.ctrlCanvas.sortingOrder = _openOrder;
     }
 
-    virtual public void Dispose()
+    public virtual void Dispose()
     {
         GameObject.Destroy(_panelRoot);
     }

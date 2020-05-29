@@ -6,8 +6,6 @@ public class GameLaunch : MonoBehaviour
     {
 //        XLuaManager.GetInstance().Startup();
         XLuaManager.GetInstance().StartGame();
-        GameUIManager.GetInstance().OpenUI(typeof(MainCityScreen));
-        GameUIManager.GetInstance().OpenUI(typeof(MoneyScreen));
         LuaFileWatcher.CreateLuaFileWatcher(XLuaManager.GetInstance().luaEnv);
     }
 

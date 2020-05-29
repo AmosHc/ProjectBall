@@ -89,3 +89,30 @@ function BaseClass(classname, super)
 
     return class_type
 end
+
+
+function LuaUIScreenBase(uiName,param)
+    local o = {}
+    local base = base or CS.ScreenBase
+    setmetatable(o,base)
+    
+    o,__index = o
+    o.base = base
+    
+    o.New = function(...)
+        local t = {}
+        setmetatable(t,o)
+        
+        local ins = CS.ScreenBase.New(uiName,param)
+        --tolua.setpeer(ins,t)
+        ins:ConnectLua(t)
+        ins.EventDelegates = {}
+        if t.ctor then
+            t.ctor(ins,...)
+        end
+        
+        return ins
+    end
+    
+    return o
+end

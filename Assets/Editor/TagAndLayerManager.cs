@@ -99,34 +99,6 @@ public class TagAndLayerManager
         return false;
     }
 
-    //public static void AddSortingLayer(string sortingLayer)
-    //{
-    //    if(IsHaveSortingLayer(sortingLayer))
-    //    {
-    //        return;
-    //    }
-    //    SerializedObject tagManager = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/Tagmanager.asset")[0]);
-    //    SerializedProperty it = tagManager.GetIterator();
-    //    while (it.NextVisible(true))
-    //    {
-    //        if (it.name != "m_SortingLayers")
-    //        {
-    //            continue;
-    //        }
-    //        it.InsertArrayElementAtIndex(it.arraySize);
-    //        SerializedProperty dataPoint = it.GetArrayElementAtIndex(it.arraySize - 1);
-    //        while (dataPoint.NextVisible(true))
-    //        {
-    //            if (dataPoint.name != "name")
-    //            {
-    //                continue;
-    //            }
-    //            dataPoint.stringValue = sortingLayer;
-    //            tagManager.ApplyModifiedProperties();
-    //        }
-    //    }
-    //}
-
     #endregion
 
 

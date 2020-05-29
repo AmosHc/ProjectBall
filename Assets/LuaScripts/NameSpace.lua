@@ -1,7 +1,7 @@
 -------------UnityEngine----
 SystemAction = CS.System.Action
 Object = CS.UnityEngine.Object;
---GameObject = CS.UnityEngine.GameObject;
+GameObject = CS.UnityEngine.GameObject;
 Transform = CS.UnityEngine.Transform;
 ParticleSystem = CS.UnityEngine.ParticleSystem;
 Camera = CS.UnityEngine.Camera;
