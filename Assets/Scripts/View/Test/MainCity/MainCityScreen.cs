@@ -41,9 +41,9 @@ public class MainCityScreen : ScreenBase
         GameUIManager.GetInstance().OpenUI(typeof(TaskScreen));
     }
 
-    protected override void UIAdapt(Vector2Int res)
+    protected override void UIAdapt(int width, int height)
     {
-        Debug.Log(string.Format("分辨率发生了变化，宽为{0},高为{1}", res.x, res.y));
+        Debug.Log(string.Format("分辨率发生了变化，宽为{0},高为{1}", width, height));
     }
 
 }

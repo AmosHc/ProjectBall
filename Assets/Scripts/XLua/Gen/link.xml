@@ -4,7 +4,6 @@
 
 	<assembly fullname="Assembly-CSharp">
 	    <type fullname="XLuaManager" preserve="all"/>
-		<type fullname="LuaScreenBase" preserve="all"/>
 		<type fullname="Tutorial.BaseClass" preserve="all"/>
 		<type fullname="Tutorial.TestEnum" preserve="all"/>
 		<type fullname="Tutorial.DerivedClass" preserve="all"/>

@@ -24,7 +24,7 @@ public class ScreenBase
     {
         _strUIName = UIName;
         mOpenParam = param;
-        ResourcesMgr.GetInstance().LoadAsset<GameObject>(UIName, PanelLoadComplete);
+        ResourcesMgr.GetInstance().LoadAsset(UIName, PanelLoadComplete);
     }
 
     // 资源加载完成
@@ -61,7 +61,7 @@ public class ScreenBase
         
     }
     
-    protected virtual void UIAdapt(Vector2Int res)
+    protected virtual void UIAdapt(int width, int height)
     {
 
     }
@@ -101,8 +101,8 @@ public class ScreenBase
 
         _ctrlBase.ctrlCanvas.pixelPerfect = true;
         _ctrlBase.ctrlCanvas.overrideSorting = true;
-        _ctrlBase.ctrlCanvas.sortingLayerID = (int)_ctrlBase.sceenPriority;
-        _sortingLayer = (int)_ctrlBase.sceenPriority;
+        _ctrlBase.ctrlCanvas.sortingLayerID = (int)_ctrlBase.screenPriority;
+        _sortingLayer = (int)_ctrlBase.screenPriority;
         _ctrlBase.ctrlCanvas.sortingOrder = _openOrder;
     }
 

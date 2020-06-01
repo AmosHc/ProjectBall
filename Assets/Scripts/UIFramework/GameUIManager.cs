@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using UnityEngine;
+using XLua;
 
 public class GameUIManager : MonoSingleton<GameUIManager>
 {
@@ -30,7 +31,7 @@ public class GameUIManager : MonoSingleton<GameUIManager>
         if (ScreenResolution.x != Screen.width || ScreenResolution.y != Screen.height)
         {
             ScreenResolution = new Vector2Int(Screen.width, Screen.height);
-            EventManager.ScreenResolutionEvt.BroadCastEvent(ScreenResolution);
+            EventManager.ScreenResolutionEvt.BroadCastEvent(ScreenResolution.x,ScreenResolution.y);
         }
     }
 

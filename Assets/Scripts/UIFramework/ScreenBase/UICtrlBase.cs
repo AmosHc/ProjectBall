@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using XLua;
+
 public enum ESceenPriority
 {
     Default = 0,   //大厅以下 预留 目前没有使用到
@@ -22,6 +24,7 @@ public enum EUICareAboutMoneyType
     Gem// 钻石
 }
 
+[CSharpCallLua]
 public class UICtrlBase : UIFEventAutoRelease
 {
     [HideInInspector]
@@ -36,7 +39,7 @@ public class UICtrlBase : UIFEventAutoRelease
     public Vector2 mReferenceResolution = new Vector2(1136f, 640f);
 
     [Tooltip("SceenBase 层级")]
-    public ESceenPriority sceenPriority = ESceenPriority.PriorityLobbyForSystem; // 层级
+    public ESceenPriority screenPriority = ESceenPriority.PriorityLobbyForSystem; // 层级
 
     // 是否使用遮罩功能(点击遮罩关闭当前页面)
     [Tooltip("勾选此选项后,打开本界面时会自动激活并更新遮罩面板,\n用户点击到遮罩面板会自动关闭此页面")]

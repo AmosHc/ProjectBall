@@ -39,3 +39,18 @@ BlendMode = CS.UnityEngine.Rendering.BlendMode
 RenderQueue = CS.UnityEngine.Rendering.RenderQueue
 PlayableDirector = CS.UnityEngine.Playables.PlayableDirector
 SystemInfo = CS.UnityEngine.SystemInfo
+Resources =  CS.UnityEngine.Resources
+Quaternion =  CS.UnityEngine.Quaternion
+Vector3 =  CS.UnityEngine.Vector3
+----------------Diy---------------------
+GameUIManager = CS.GameUIManager
+LuaHelper = CS.LuaHelper
+ResourcesMgr = CS.ResourcesMgr
+EventManager = CS.EventManager
+
+-----------------UI----------------------
+Canvas = CS.UnityEngine.Canvas
+Button = CS.UnityEngine.UI.Button
+UICtrlBase = CS.UICtrlBase
+ESceenPriority = CS.ESceenPriority
+EUICareAboutMoneyType = CS.EUICareAboutMoneyType

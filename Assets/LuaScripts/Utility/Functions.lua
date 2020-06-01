@@ -31,7 +31,7 @@ function SetLogLevel(level)
         enable_level_2 = false;
         enable_level_3 = false;
     end
-    --LuaHelper.SetLogLevel(level)
+    LuaHelper.SetLogLevel(level)
 end
 
 local oldPrint = print
@@ -550,12 +550,922 @@ function testbit32_low(val,index)
     return (val >> index & 1) == 1
 end
 
---- test bit for lua53 uint64 structure
---function testbit64_uint(val,index)
---    local low,high = uint64.tonum2(val)
---    if index > 31 then
---        return (high >> (index - 31) & 1) == 1
---    else
---        return (low >> index & 1) == 1
---    end
---end
+--序列化.
+function serialize(t)
+    if t == nil then
+        return "is nil"
+    end
+    local mark = {}
+    local assign = {}
+
+    local function table2str(t, parent)
+        mark[t] = parent
+        local ret = {}
+
+        if "table" == type(t) then
+            for i, v in pairs(t) do
+                local k = tostring(i)
+                local dotkey = parent .. "[" .. k .. "]"
+                local t = type(v)
+                if t == "userdata" or t == "function" or t == "thread" or t == "proto" or t == "upval" then
+                    --ignore  
+                elseif t == "table" then
+                    if mark[v] then
+                        table.insert(assign, dotkey .. "=" .. mark[v])
+                    else
+                        table.insert(ret, table2str(v, dotkey))
+                    end
+                elseif t == "string" then
+                    table.insert(ret, string.format("%q", v))
+                elseif t == "number" then
+                    if v == math.huge then
+                        table.insert(ret, "math.huge")
+                    elseif v == -math.huge then
+                        table.insert(ret, "-math.huge")
+                    else
+                        table.insert(ret, tostring(v))
+                    end
+                else
+                    table.insert(ret, tostring(v))
+                end
+            end
+        else
+            for f, v in pairs(t) do
+                local k = type(f) == "number" and "[" .. f .. "]" or f
+                local dotkey = parent .. (type(f) == "number" and k or "." .. k)
+                local t = type(v)
+                if t == "userdata" or t == "function" or t == "thread" or t == "proto" or t == "upval" then
+                    --ignore  
+                elseif t == "table" then
+                    if mark[v] then
+                        table.insert(assign, dotkey .. "=" .. mark[v])
+                    else
+                        table.insert(ret, string.format("%s=%s", k, table2str(v, dotkey)))
+                    end
+                elseif t == "string" then
+                    table.insert(ret, string.format("%s=%q", k, v))
+                elseif t == "number" then
+                    if v == math.huge then
+                        table.insert(ret, string.format("%s=%s", k, "math.huge"))
+                    elseif v == -math.huge then
+                        table.insert(ret, string.format("%s=%s", k, "-math.huge"))
+                    else
+                        table.insert(ret, string.format("%s=%s", k, tostring(v)))
+                    end
+                else
+                    table.insert(ret, string.format("%s=%s", k, tostring(v)))
+                end
+            end
+        end
+
+        return "{" .. table.concat(ret, ",") .. "}"
+    end
+
+    if type(t) == "table" then
+        return string.format("%s%s", table2str(t, "_"), table.concat(assign, " "))
+    else
+        return tostring(t)
+    end
+end
+
+function printf(fmt, ...)
+    print(string.format(tostring(fmt), ...))
+end
+
+function checknumber(value, base)
+    return tonumber(value, base) or 0
+end
+
+function checkint(value)
+    return math.round(checknumber(value))
+end
+
+function checkbool(value)
+    return (value ~= nil and value ~= false)
+end
+
+function checktable(value)
+    if type(value) ~= "table" then
+        value = {}
+    end
+    return value
+end
+
+function isset(hashtable, key)
+    local t = type(hashtable)
+    return (t == "table" or t == "userdata") and hashtable[key] ~= nil
+end
+
+local setmetatableindex_
+setmetatableindex_ = function(t, index)
+    if type(t) == "userdata" then
+        local peer = tolua.getpeer(t)
+        if not peer then
+            peer = {}
+            tolua.setpeer(t, peer)
+        end
+        setmetatableindex_(peer, index)
+    else
+        local mt = getmetatable(t)
+        if not mt then
+            mt = {}
+        end
+        if not mt.__index then
+            mt.__index = index
+            setmetatable(t, mt)
+        elseif mt.__index ~= index then
+            setmetatableindex_(mt, index)
+        end
+    end
+end
+setmetatableindex = setmetatableindex_
+
+function clone(object)
+    local lookup_table = {}
+    local function _copy(object)
+        if type(object) ~= "table" then
+            return object
+        elseif lookup_table[object] then
+            return lookup_table[object]
+        end
+        local new_table = {}
+        lookup_table[object] = new_table
+        for key, value in pairs(object) do
+            new_table[_copy(key)] = _copy(value)
+        end
+        return setmetatable(new_table, getmetatable(object))
+    end
+    return _copy(object)
+end
+
+function class(classname, ...)
+    local cls = { __cname = classname }
+
+    local supers = { ... }
+    for _, super in ipairs(supers) do
+        local superType = type(super)
+        assert(superType == "nil" or superType == "table" or superType == "function",
+                string.format("class() - create class \"%s\" with invalid super class type \"%s\"",
+                        classname, superType))
+
+        if superType == "function" then
+            assert(cls.__create == nil,
+                    string.format("class() - create class \"%s\" with more than one creating function",
+                            classname));
+            -- if super is function, set it to __create
+            cls.__create = super
+        elseif superType == "table" then
+            if super[".isclass"] then
+                -- super is native class
+                assert(cls.__create == nil,
+                        string.format("class() - create class \"%s\" with more than one creating function or native class",
+                                classname));
+                cls.__create = function()
+                    return super:create()
+                end
+            else
+                -- super is pure lua class
+                cls.__supers = cls.__supers or {}
+                cls.__supers[#cls.__supers + 1] = super
+                if not cls.super then
+                    -- set first super pure lua class as class.super
+                    cls.super = super
+                end
+            end
+        else
+            error(string.format("class() - create class \"%s\" with invalid super type",
+                    classname), 0)
+        end
+    end
+
+    cls.__index = cls
+    if not cls.__supers or #cls.__supers == 1 then
+        setmetatable(cls, { __index = cls.super })
+    else
+        setmetatable(cls, { __index = function(_, key)
+            local supers = cls.__supers
+            for i = 1, #supers do
+                local super = supers[i]
+                if super[key] then
+                    return super[key]
+                end
+            end
+        end })
+    end
+
+    if not cls.ctor then
+        -- add default constructor
+        cls.ctor = function()
+        end
+    end
+    cls.new = function(...)
+        local instance
+        if cls.__create then
+            instance = cls.__create(...)
+        else
+            instance = {}
+        end
+        setmetatableindex(instance, cls)
+        instance.class = cls
+        instance:ctor(...)
+        return instance
+    end
+    return cls
+end
+
+local binding_map_mt = { __mode = 'k' }
+local binding_map = {}
+setmetatable(binding_map, binding_map_mt);
+
+function bind(fun, ...)
+    local bparams = { ... }
+    local r = function(...)
+        local params = { ... }
+        for i, var in ipairs(bparams) do
+            table.insert(params, i, var)
+        end
+        return fun(unpack(params));
+    end
+    binding_map[r] = { f = fun, p = bparams }
+    return r;
+end
+
+local iskindof_
+iskindof_ = function(cls, name)
+    local __index = rawget(cls, "__index")
+    if type(__index) == "table" and rawget(__index, "__cname") == name then
+        return true
+    end
+
+    if rawget(cls, "__cname") == name then
+        return true
+    end
+    local __supers = rawget(cls, "__supers")
+    if not __supers then
+        return false
+    end
+    for _, super in ipairs(__supers) do
+        if iskindof_(super, name) then
+            return true
+        end
+    end
+    return false
+end
+
+function iskindof(obj, classname)
+    local t = type(obj)
+    if t ~= "table" and t ~= "userdata" then
+        return false
+    end
+
+    local mt
+    if t == "userdata" then
+        if tolua.iskindof(obj, classname) then
+            return true
+        end
+        mt = tolua.getpeer(obj)
+    else
+        mt = getmetatable(obj)
+    end
+    if mt then
+        return iskindof_(mt, classname)
+    end
+    return false
+end
+
+function import(moduleName, currentModuleName)
+    local currentModuleNameParts
+    local moduleFullName = moduleName
+    local offset = 1
+
+    while true do
+        if string.byte(moduleName, offset) ~= 46 then
+            -- .
+            moduleFullName = string.sub(moduleName, offset)
+            if currentModuleNameParts and #currentModuleNameParts > 0 then
+                moduleFullName = table.concat(currentModuleNameParts, ".") .. "." .. moduleFullName
+            end
+            break
+        end
+        offset = offset + 1
+
+        if not currentModuleNameParts then
+            if not currentModuleName then
+                local n, v = debug.getlocal(3, 1)
+                currentModuleName = v
+            end
+
+            currentModuleNameParts = string.split(currentModuleName, ".")
+        end
+        table.remove(currentModuleNameParts, #currentModuleNameParts)
+    end
+
+    return require(moduleFullName)
+end
+
+--重新require一个lua文件，替代系统文件。
+function reimport(name)
+    deleteFile(name)
+    return require(name)
+end
+
+function deleteFile(name)
+    local package = package
+    name = string.gsub(name,'/','.')
+    package.loaded[name] = nil
+    package.preload[name] = nil
+end
+
+function handler(obj, method)
+    return function(...)
+        return method(obj, ...)
+    end
+end
+
+function math.newrandomseed()
+    local ok, socket = pcall(function()
+        return require("socket")
+    end)
+
+    if ok then
+        math.randomseed(socket.gettime() * 1000)
+    else
+        math.randomseed(os.time())
+    end
+    math.random()
+    math.random()
+    math.random()
+    math.random()
+end
+
+function math.round(value)
+    value = checknumber(value)
+    return math.floor(value + 0.5)
+end
+
+local pi_div_180 = math.pi / 180
+function math.angle2radian(angle)
+    return angle * pi_div_180
+end
+
+local pi_mul_180 = math.pi * 180
+function math.radian2angle(radian)
+    return radian / pi_mul_180
+end
+
+function math.isNaN(value)
+    return value ~= value
+end
+
+function table.nums(t)
+    local count = 0
+    for k, v in pairs(t) do
+        count = count + 1
+    end
+    return count
+end
+
+function table.keys(hashtable)
+    local keys = {}
+    for k, v in pairs(hashtable) do
+        keys[#keys + 1] = k
+    end
+    return keys
+end
+
+function table.values(hashtable)
+    local values = {}
+    for k, v in pairs(hashtable) do
+        values[#values + 1] = v
+    end
+    return values
+end
+
+
+function table.sync(to,from)
+    for key, var in pairs(from) do
+        if type(var) == "table" then
+            if to[key] == nil then
+                to[key] = {};
+            end
+            table.sync(to[key],var);
+        else
+            to[key] = var;
+        end
+    end
+
+end
+
+function table.merge(dest, src)
+    for k, v in pairs(src) do
+        dest[k] = v
+    end
+end
+
+function table.insertto(dest, src, begin)
+    begin = checkint(begin)
+    if begin <= 0 then
+        begin = #dest + 1
+    end
+
+    local len = #src
+    for i = 0, len - 1 do
+        dest[i + begin] = src[i + 1]
+    end
+end
+
+function table.indexof(array, value, begin)
+    for i = begin or 1, #array do
+        if array[i] == value then
+            return i
+        end
+    end
+    return false
+end
+
+function table.IndexOf(array, value)
+    for i = 1, #array do
+        if array[i] == value then return i end
+    end
+    return 0
+end
+
+function table.keyof(hashtable, value)
+    for k, v in pairs(hashtable) do
+        if v == value then
+            return k
+        end
+    end
+    return nil
+end
+
+function table.removeItem(array, value, removeall)
+    local c, i, max = 0, 1, #array
+    while i <= max do
+        if array[i] == value then
+            table.remove(array, i)
+            c = c + 1
+            i = i - 1
+            max = max - 1
+            if not removeall then
+                break
+            end
+        end
+        i = i + 1
+    end
+    return c
+end
+
+function table.removebyvalue(array, value, removeall)
+    local c, i, max = 0, 1, #array
+    while i <= max do
+        if array[i] == value then
+            table.remove(array, i)
+            c = c + 1
+            i = i - 1
+            max = max - 1
+            if not removeall then break end
+        end
+        i = i + 1
+    end
+    return c
+end
+
+
+function table.removeMatch(array,key,value)
+    local c, i, max = 0, 1, #array
+    while i <= max do
+        if array[i][key] == value then
+            table.remove(array, i)
+            c = c + 1
+            i = i - 1
+            max = max - 1
+            if not removeall then break end
+        end
+        i = i + 1
+    end
+    return c
+end
+
+function table.updateMatch(array,key,value,key1,value1)
+    local c, i, max = 0, 1, #array
+    while i <= max do
+        print(key,value,key1,value1,array[i][key])
+        if array[i][key] == value then
+            print("table.updateMatch")
+            array[i][key1] = value1
+            c = c + 1
+            i = i - 1
+            max = max - 1
+            break
+        end
+        i = i + 1
+    end
+    return c
+end
+
+function table.map(t, fn)
+    for k, v in pairs(t) do
+        t[k] = fn(v, k)
+    end
+end
+
+function table.walk(t, fn)
+    for k, v in pairs(t) do
+        fn(v, k)
+    end
+end
+
+function table.filter(t, fn)
+    for k, v in pairs(t) do
+        if not fn(v, k) then
+            t[k] = nil
+        end
+    end
+end
+
+function table.unique(t, bArray)
+    local check = {}
+    local n = {}
+    local idx = 1
+    for k, v in pairs(t) do
+        if not check[v] then
+            if bArray then
+                n[idx] = v
+                idx = idx + 1
+            else
+                n[k] = v
+            end
+            check[v] = true
+        end
+    end
+    return n
+end
+
+function table.hasValue(t, v)
+    return table.values(t)[v]
+end
+
+function table.values(t)
+    local _t = {}
+    for k, v in pairs(t) do
+        _t[v] = true
+    end
+    return _t
+end
+
+local function exportstring( s )
+    return string.format("%q", s)
+end
+
+function table.save(  tbl, filename )
+    local charS, charE = "   ", "\n"
+    local file, err = io.open( filename, "wb" )
+    if err then
+        return err
+    end
+
+    local tables, lookup = { tbl }, { [tbl] = 1 }
+    file:write( "return {" .. charE )
+    for idx, t in ipairs( tables ) do
+        file:write( "-- Table: {" .. idx .. "}" .. charE )
+        file:write( "{" .. charE )
+        local thandled = {}
+
+        for i, v in ipairs( t ) do
+            thandled[i] = true
+            local stype = type( v )
+            if stype == "table" then
+                if not lookup[v] then
+                    table.insert( tables, v )
+                    lookup[v] = #tables
+                end
+                file:write( charS .. "{" .. lookup[v] .. "}," .. charE )
+            elseif stype == "string" then
+                file:write(  charS .. exportstring( v ) .. "," .. charE )
+            elseif stype == "number" then
+                file:write(  charS .. tostring( v ) .. "," .. charE )
+            elseif stype == "boolean" then
+                file:write(  charS .. (v and "true" or "false") .. "," .. charE )
+            end
+        end
+
+        for i, v in pairs( t ) do
+            if (not thandled[i]) then
+                local str = ""
+                local stype = type( i )
+                if stype == "table" then
+                    if not lookup[i] then
+                        table.insert( tables, i )
+                        lookup[i] = #tables
+                    end
+                    str = charS .. "[{" .. lookup[i] .. "}]="
+                elseif stype == "string" then
+                    str = charS .. "[" .. exportstring( i ) .. "]="
+                elseif stype == "number" then
+                    str = charS .. "[" .. tostring( i ) .. "]="
+                elseif stype == "boolean" then
+                    str = charS .. "[" .. (v and "true" or "false") .. "]="
+                end
+
+                if str ~= "" then
+                    stype = type( v )
+                    if stype == "table" then
+                        if not lookup[v] then
+                            table.insert( tables, v )
+                            lookup[v] = #tables
+                        end
+                        file:write( str .. "{" .. lookup[v] .. "}," .. charE )
+                    elseif stype == "string" then
+                        file:write( str .. exportstring( v ) .. "," .. charE )
+                    elseif stype == "number" then
+                        file:write( str .. tostring( v ) .. "," .. charE )
+                    elseif stype == "boolean" then
+                        file:write(  str .. (v and "true" or "false") .. "," .. charE )
+                    end
+                end
+            end
+        end
+        file:write( "}," .. charE )
+    end
+    file:write( "}" )
+    file:close()
+end
+
+function table.load( sfile )
+    local ftables, err = loadfile( sfile )
+    if err then
+        return _, err
+    end
+    local tables = ftables()
+    for idx = 1, #tables do
+        local tolinki = {}
+        for i, v in pairs( tables[idx] ) do
+            if type( v ) == "table" then
+                tables[idx][i] = tables[v[1]]
+            end
+            if type( i ) == "table" and tables[i[1]] then
+                table.insert( tolinki, { i, tables[i[1]] } )
+            end
+        end
+        for _, v in ipairs( tolinki ) do
+            tables[idx][v[2]], tables[idx][v[1]] = tables[idx][v[1]], nil
+        end
+    end
+    return tables[1]
+end
+
+string._htmlspecialchars_set = {}
+string._htmlspecialchars_set["&"] = "&amp;"
+string._htmlspecialchars_set["\""] = "&quot;"
+string._htmlspecialchars_set["'"] = "&#039;"
+string._htmlspecialchars_set["<"] = "&lt;"
+string._htmlspecialchars_set[">"] = "&gt;"
+
+function string.htmlspecialchars(input)
+    for k, v in pairs(string._htmlspecialchars_set) do
+        input = string.gsub(input, k, v)
+    end
+    return input
+end
+
+function string.restorehtmlspecialchars(input)
+    for k, v in pairs(string._htmlspecialchars_set) do
+        input = string.gsub(input, v, k)
+    end
+    return input
+end
+
+function string.nl2br(input)
+    return string.gsub(input, "\n", "<br />")
+end
+
+function string.text2html(input)
+    input = string.gsub(input, "\t", "    ")
+    input = string.htmlspecialchars(input)
+    input = string.gsub(input, " ", "&nbsp;")
+    input = string.nl2br(input)
+    return input
+end
+
+function string.splitToNumber(input, delimiter)
+    input = tostring(input)
+    delimiter = tostring(delimiter)
+    if (delimiter == '') then
+        return false
+    end
+    local pos, arr = 0, {}
+    for st, sp in function()
+        return string.find(input, delimiter, pos, true)
+    end do
+        table.insert(arr, string.sub(input, pos, st - 1) * 1)
+        pos = sp + 1
+    end
+    table.insert(arr, string.sub(input, pos) * 1)
+    return arr
+end
+
+function string.ltrim(input)
+    return string.gsub(input, "^[ \t\n\r]+", "")
+end
+
+function string.rtrim(input)
+    return string.gsub(input, "[ \t\n\r]+$", "")
+end
+
+function string.trim(input)
+    input = string.gsub(input, "^[ \t\n\r]+", "")
+    return string.gsub(input, "[ \t\n\r]+$", "")
+end
+
+function string.ucfirst(input)
+    return string.upper(string.sub(input, 1, 1)) .. string.sub(input, 2)
+end
+
+local function urlencodechar(char)
+    return "%" .. string.format("%02X", string.byte(char))
+end
+function string.urlencode(input)
+    input = string.gsub(tostring(input), "\n", "\r\n")
+    input = string.gsub(input, "([^%w%.%- ])", urlencodechar)
+    return string.gsub(input, " ", "+")
+end
+
+function string.urldecode(input)
+    input = string.gsub(input, "+", " ")
+    input = string.gsub(input, "%%(%x%x)", function(h)
+        return string.char(checknumber(h, 16))
+    end)
+    input = string.gsub(input, "\r\n", "\n")
+    return input
+end
+
+function string.utf8len(input)
+    local len = string.len(input)
+    local left = len
+    local cnt = 0
+    local arr = { 0, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc }
+    while left ~= 0 do
+        local tmp = string.byte(input, -left)
+        local i = #arr
+        while arr[i] do
+            if tmp >= arr[i] then
+                left = left - i
+                break
+            end
+            i = i - 1
+        end
+        cnt = cnt + 1
+    end
+    return cnt
+end
+
+function string.utf8tochars(input)
+    local list = {}
+    local len = string.len(input)
+    local index = 1
+    local arr = { 0, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc }
+    while index <= len do
+        local c = string.byte(input, index)
+        local offset = 1
+        if c < 0xc0 then
+            offset = 1
+        elseif c < 0xe0 then
+            offset = 2
+        elseif c < 0xf0 then
+            offset = 3
+        elseif c < 0xf8 then
+            offset = 4
+        elseif c < 0xfc then
+            offset = 5
+        end
+        local str = string.sub(input, index, index + offset - 1)
+        index = index + offset
+        table.insert(list, { byteNum = offset, char = str })
+    end
+
+    return list
+end
+
+function string.checkASCII(input)
+    local len = string.len(input)
+    local index = 1
+    local arr = 0xc0
+    while index <= len do
+        local c = string.byte(input, index)
+        if c >= 0xc0 then
+            return false
+        end
+        index = index + 1
+    end
+    return true
+end
+
+function string.utf8toSub(content, bIdex, eIdex)
+    local chars = string.utf8tochars(content)
+    local nums = 0
+    local newString = ""
+    for i, v in ipairs(chars or {}) do
+        if i >= bIdex and i <= eIdex then
+            newString = newString .. v.char
+            nums = nums + 1
+        elseif i > eIdex then
+            break
+        end
+    end
+    return newString
+end
+
+function string.formatnumberthousands(num)
+    local formatted = tostring(checknumber(num))
+    local k
+    while true do
+        formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+        if k == 0 then
+            break
+        end
+    end
+    return formatted
+end
+
+function string.isNilOrEmpty(str)
+    return str == nil or str == ''
+end
+
+
+function string.endswith(input, substr)
+    if input == nil or substr == nil then
+        return nil, "the string or the sub-string parameter is nil"
+    end
+    local str_tmp = string.reverse(input)
+    local substr_tmp = string.reverse(substr)
+    if string.find(str_tmp, substr_tmp) ~= 1 then
+        return false
+    else
+        return true
+    end
+end
+
+function readonly(t)
+    local proxy = {}
+    local mt = {
+        __index = t,
+        __newindex = function(t, k, v)
+            error("!!readonly!!", 2)
+        end
+    }
+    setmetatable(proxy, mt)
+    return proxy
+end
+
+
+function Bounds2Rect(bounds)
+    local origin = Camera.main:WorldToScreenPoint(Vector3.New(bounds.min.x, bounds.max.y, bounds.center.z))
+    local extend = Camera.main:WorldToScreenPoint(Vector3.New(bounds.max.x, bounds.min.y, bounds.center.z))
+    return Rect.New(origin.x, Screen.height - origin.y, extend.x - origin.x, origin.y - extend.y)
+end
+
+function safe_call(func,...)
+    if jit then
+        return xpcall(func, traceback, ...)
+    else
+        local args = {...}
+        local func = function() func(unpack(args)) end
+        return xpcall(func, traceback)
+    end
+end
+
+function count_call(label,count,call)
+    if not DebugVersion then
+        return
+    end
+    local dt = rawget(_G,label)
+    if dt == nil then
+        dt = 0
+        rawset(_G,label,dt)
+    end
+    if dt > count then
+        dt = 0
+        call()
+    else
+        dt = dt + 1
+    end
+    rawset(_G,label,dt)
+
+end
+
+--拷贝一个值而不是引用
+function DeepCopy(orig)
+    local orig_type = type(orig)
+    local copy
+    if orig_type == 'table' then
+        copy = {}
+        for orig_key,orig_value in next,orig,nil do
+            copy[DeepCopy(orig_key)] = DeepCopy(orig_value)
+        end
+        setmetatable(copy,DeepCopy(getmetatable(orig)))
+    else
+        copy = orig
+    end
+    return copy
+end

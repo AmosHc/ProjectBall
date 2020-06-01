@@ -9,7 +9,6 @@ local function Main()
             {
                 __index = function(t,k)
                     if (k ~= "jit") then
-                        ErrorLogMgr:Ignore(k)
                         DLog(debug.traceback("未注册的全局变量"..k,2))
                     end
                 end
@@ -25,6 +24,7 @@ end
 --初始化--
 function Game.Start()
     Main();
+    UIMgr:OpenUI("MainCityScreen")
 end
 
 function OnApplicationQuit()
@@ -32,6 +32,7 @@ function OnApplicationQuit()
 end
 
 function OnUpdate(deltaTime)
+    UIMgr:Update()
 end
 
 return Game

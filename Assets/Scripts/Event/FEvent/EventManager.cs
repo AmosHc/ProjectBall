@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using XLua;
 
+[CSharpCallLua]
 public class EventManager
 {
     //public static FEvent OnGuildCreated = new FEvent);   //创建公会成功
@@ -7,6 +9,6 @@ public class EventManager
 
     public static FEvent<EUICareAboutMoneyType[]> OnMoneyTypeChange = new FEvent<EUICareAboutMoneyType[]>();   //货币栏显示变化
 
-    public static FEvent<Vector2Int> ScreenResolutionEvt = new FEvent<Vector2Int>();   //分辨率变化适配
+    public static FEvent<int,int> ScreenResolutionEvt = new FEvent<int,int>();   //分辨率变化适配
 
 }

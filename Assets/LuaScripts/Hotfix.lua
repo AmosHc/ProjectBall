@@ -3,19 +3,19 @@
 --dbg.tcpConnect('localhost', 9966)
 
 function hotfix(filename)
-    print("start hotfix: ",filename)
+    log("start hotfix: ",filename)
     local oldModule
     if package.loaded[filename] then
         oldModule = package.loaded[filename]
         package.loaded[filename] = nil
     else
-        print('this file nevev loaded: ',filename)
+        log('this file nevev loaded: ',filename)
         return
     end
     local ok,err = pcall(require, filename)
     if not ok then
         package.loaded[filename] = oldModule
-        print('reload lua file failed.',err)
+        log('reload lua file failed.',err)
         return
     end
 
@@ -26,7 +26,7 @@ function hotfix(filename)
     if oldModule.OnReload ~= nil then
         oldModule:OnReload()
     end
-    print('replaced succeed')
+    log('replaced succeed')
     package.loaded[filename] = oldModule
 end
 
@@ -46,7 +46,7 @@ function update_func(new_func, old_func)
     for i = 1, math.huge do
         local name, value = debug.getupvalue(new_func, i)
         if not name then break end
-        print('set up value: name:',name)
+        log('set up value: name:',name)
         local old_value = old_upvalue_map[name]
         if old_value then
             debug.setupvalue(new_func, i, old_value)
