@@ -14,7 +14,6 @@ function ScreenBase:ctor(uiRes,uiName,data)
     self.sortingLayer = 0 -- 界面层级
     self.data = data --界面打开的传入参数
 
-    self:OnCreate()
     self:StartLoad();
 end
 
@@ -44,12 +43,13 @@ function ScreenBase:UpdateLayoutLevel()
 
     ctrlBase.ctrlCanvas.pixelPerfect = true;
     ctrlBase.ctrlCanvas.overrideSorting = true;
-    ctrlBase.ctrlCanvas.sortingLayerID = ctrlBase.screenPriority;
-    self.sortingLayer = ctrlBase.screenPriority;
+    ctrlBase.ctrlCanvas.sortingLayerID = ctrlBase:GetScreenPriority();
+    self.sortingLayer = ctrlBase:GetScreenPriority();
     ctrlBase.ctrlCanvas.sortingOrder = self.openOrder;
 end
 
 function ScreenBase:OnLoadSuccess()
+    self:OnCreate()
     self.uiCtrl:AutoRelease(EventManager.ScreenResolutionEvt:Subscribe(handler(self,self.UIAdapt)))----注册适配监听事件
     if self.uiCtrl.mUseMask then
         MaskScreenManager:Show(self);

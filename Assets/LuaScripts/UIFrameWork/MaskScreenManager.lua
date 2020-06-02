@@ -8,7 +8,7 @@ local MaskScreenManager = {}
 function MaskScreenManager:Show(screen)
     if not self.goAutoMask then
         self.screen = screen
-        ResourcesMgr.GetInstance():LoadAsset("UIAutoMask", handler(self, self.OnloadAccomplish))
+        ResourcesMgr.GetInstance():LoadAsset("UGUI/UIAutoMask", handler(self, self.OnloadAccomplish))
     else
         self:AttachEvent(screen)
     end

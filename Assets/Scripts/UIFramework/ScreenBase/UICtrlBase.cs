@@ -36,7 +36,7 @@ public class UICtrlBase : UIFEventAutoRelease
     }
 
     //基准分辨率
-    public Vector2 mReferenceResolution = new Vector2(1136f, 640f);
+    public Vector2 mReferenceResolution = new Vector2(1624f, 750f);
 
     [Tooltip("SceenBase 层级")]
     public ESceenPriority screenPriority = ESceenPriority.PriorityLobbyForSystem; // 层级
@@ -58,5 +58,10 @@ public class UICtrlBase : UIFEventAutoRelease
     void Awake()
     {
         _ctrlCanvas = GetComponent<Canvas>();
+    }
+
+    public int GetScreenPriority()
+    {
+        return (int) screenPriority;
     }
 }

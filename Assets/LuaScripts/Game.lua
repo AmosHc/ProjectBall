@@ -24,7 +24,7 @@ end
 --初始化--
 function Game.Start()
     Main();
-    UIMgr:OpenUI("MainCityScreen")
+    UIMgr:OpenUI("WelcomeUI")
 end
 
 function OnApplicationQuit()

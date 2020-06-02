@@ -1,6 +1,7 @@
 --print("=============GameInit==============")
 --
 --
+
 DebugVersion = true
 EnableClientGM = false
 ShowLogWindow = false
@@ -16,6 +17,7 @@ require ("Utility/Functions")
 require ("BaseClass")
 require ("NameSpace")
 require ("math")
+require ("Utility/GCTool")
 inspect = require ("Utility/inspect")
 
 if DebugVersion then
@@ -26,6 +28,7 @@ end
 
 --EventDispatcherCls = require "Core/EventDispatcher"
 --EventDispatcher = EventDispatcherCls.new()
+GameConfig = require ("Constant/Config") --全局唯一的配置表
 GCTool = require ("Utility/GCTool")
 inWindowsEditor = Application.platform == RuntimePlatform.WindowsEditor
 utable = require ("Utility/TableUtility")

@@ -9,6 +9,8 @@ ScreenBase = require ("UIFrameWork/ScreenBase/ScreenBase")
 SubScreenBase = require ("UIFrameWork/ScreenBase/SubScreenBase")
 MaskScreenManager = require ("UIFrameWork/MaskScreenManager")
 
+UI_RES_PREFIX = "UGUI/"
+
 function UIManager:Create()
     self:InitVar()
     self:Init()
@@ -23,15 +25,15 @@ function UIManager:InitVar()
     self.sortTemp = nil --处理界面排序
     self.typeScreens = {}
     self.uiOpenOrder = 0 --UI打开时的Order值 用来标识界面层级顺序
-    self.ScreenResolutionX = 1136
-    self.ScreenResolutionY = 640
+    self.ScreenResolutionX = 1624
+    self.ScreenResolutionY = 750
 end
 
 function UIManager:Init()
     self.go = GameObject("UIManager");
     self.transform = self.go.transform
     self.transform:SetParent(GameObject.Find("BootObj").transform)--挂接到BootObj下
-    self.uiRoot = GameObject.Instantiate(Resources.Load("UIRoot"), self.transform)
+    self.uiRoot = GameObject.Instantiate(Resources.Load(UI_RES_PREFIX.."UIRoot"), self.transform)
     self.uiCamera = self.uiRoot:GetComponent(typeof(Canvas)).worldCamera;
 end
 
@@ -68,7 +70,7 @@ function UIManager:OpenUI(uiName,data)
         end
         ui:Show()
     else
-        ui = require(uiConfig.luaPath).New(uiConfig.uiResPath,uiName,data) --界面是唯一的，单例
+        ui = require(uiConfig.luaPath).New(UI_RES_PREFIX..uiConfig.uiResPath,uiName,data) --界面是唯一的，单例
         self.typeScreens[uiName] = ui
         ui:SetOpenOrder(self.uiOpenOrder) --设置打开序号
     end
