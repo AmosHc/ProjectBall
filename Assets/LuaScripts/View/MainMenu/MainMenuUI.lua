@@ -6,15 +6,9 @@
 local MainMenuUI = class("MainMenuUI",ScreenBase)
 
 function MainMenuUI:BindAction()
-    self.uiCtrl.btnThemeChooser.onClick:AddListener(handler(self,self.OnOpenThemeChooserClick))
-    self.uiCtrl.btnCreativeWorkshop.onClick:AddListener(handler(self,self.OnOpenCreativeWorkshopClick))
-    self.uiCtrl.btnSetting.onClick:AddListener(handler(self,self.OnOpenSettingClick))
-end
-
-function MainMenuUI:UnBindAction()
-    self.uiCtrl.btnThemeChooser.onClick:RemoveListener(handler(self,self.OnOpenThemeChooserClick))
-    self.uiCtrl.btnCreativeWorkshop.onClick:RemoveListener(handler(self,self.OnOpenCreativeWorkshopClick))
-    self.uiCtrl.btnSetting.onClick:RemoveListener(handler(self,self.OnOpenSettingClick))
+    self:AddOnClickListener(self.uiCtrl.btnThemeChooser,handler(self,self.OnOpenThemeChooserClick))
+    self:AddOnClickListener(self.uiCtrl.btnCreativeWorkshop,handler(self,self.OnOpenCreativeWorkshopClick))
+    self:AddOnClickListener(self.uiCtrl.btnSetting,handler(self,self.OnOpenSettingClick))
 end
 
 function MainMenuUI:OnOpenThemeChooserClick()

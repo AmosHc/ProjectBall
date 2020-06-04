@@ -8,4 +8,5 @@ public class SelectLevelCtrl : UICtrlBase
     public GameObject groupLevels;
     public Text txtTitle;
     public List<Button> btnLevels;
+    public Button btnClose;
 }

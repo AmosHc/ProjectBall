@@ -51,6 +51,7 @@ EventManager = CS.EventManager
 -----------------UI----------------------
 Canvas = CS.UnityEngine.Canvas
 Button = CS.UnityEngine.UI.Button
+Text = CS.UnityEngine.UI.Text
 UICtrlBase = CS.UICtrlBase
 ESceenPriority = CS.ESceenPriority
 EUICareAboutMoneyType = CS.EUICareAboutMoneyType

@@ -6,17 +6,19 @@
 local SelectLevelUI = class("SelectLevelUI",ScreenBase)
 
 function SelectLevelUI:OnCreate()
-    ResourcesMgr.GetInstance():LoadAsset(UI_RES_PREFIX.."SelectLevel/btnLevel", handler(self,self.InitLevels));
+    self.levelsCfg = GameConfig.LevelsByLevelID
+end
+
+function SelectLevelUI:BindAction()
+    self:AddOnClickListener(self.uiCtrl.btnClose,handler(self,self.Close))
 end
 
 function SelectLevelUI:UnBindAction()
-    --for i = 1, self.uiCtrl.btnLevels.count do
-    --    btn.onClick:RemoveListener(handler(self,self.OnStartGameClick))
-    --end
 end
 
 function SelectLevelUI:OnShow()
-    self.uiCtrl.txtTitle.text = "测试主题"
+    self.uiCtrl.txtTitle.text = self.data.titleName
+    ResourcesMgr.GetInstance():LoadAsset(UI_RES_PREFIX.."SelectLevel/btnLevel", handler(self,self.InitLevels))
 end
 
 function SelectLevelUI:OnStartGameClick()
@@ -24,11 +26,16 @@ function SelectLevelUI:OnStartGameClick()
 end
 
 function SelectLevelUI:InitLevels(obj)
-    for i = 1, 5 do
+    if not self.data then
+        return
+    end
+    for idx, levelID in ipairs(self.data.levels) do
+        local level = self.levelsCfg[levelID]
         local levelItem = Object.Instantiate(obj, self.uiCtrl.groupLevels.transform);
         levelItem.transform.localScale = Vector3.one;
+        levelItem.transform:Find("Text"):GetComponent(typeof(Text)).text = level.LevelName
         local btn = levelItem:GetComponent(typeof(Button))
-        btn.onClick:AddListener(handler(self,self.OnStartGameClick))
+        self:AddOnClickListener(btn,handler(self,self.OnStartGameClick))
         self.uiCtrl.btnLevels:Add(btn)
     end
 end

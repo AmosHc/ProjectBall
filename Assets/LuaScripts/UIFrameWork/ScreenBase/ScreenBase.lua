@@ -13,8 +13,9 @@ function ScreenBase:ctor(uiRes,uiName,data)
     self.openOrder = 0 -- 界面打开顺序
     self.sortingLayer = 0 -- 界面层级
     self.data = data --界面打开的传入参数
-
-    self:StartLoad();
+    
+    self:InitBtnListenerTabs()
+    self:StartLoad()
 end
 
 function ScreenBase:StartLoad()
@@ -73,6 +74,7 @@ function ScreenBase:GetSortingLayer()
 end
 
 function ScreenBase:Close()
+    self:UnBindListenerAction()
     self:UnBindAction()
     self:OnClose()
     UIMgr:RemoveUI(self.uiName)
@@ -120,6 +122,31 @@ function ScreenBase:OnDispose()
 end
 --公开复写接口,ui分辨率适配
 function ScreenBase:UIAdapt(width,height)
+end
+
+------------------复写事件，界面卸载时全部自动卸载事件，防止吊人漏卸---------------------
+function ScreenBase:InitBtnListenerTabs()
+    self.allOnClickObjs = {}
+end
+
+function ScreenBase:UnBindListenerAction()
+    self:RemoveOnClickListener()
+end
+
+function ScreenBase:RemoveOnClickListener()
+    for obj, _ in pairs(self.allOnClickObjs) do
+        obj.onClick:RemoveAllListeners()
+    end
+    self.allOnClickObjs = nil
+end
+
+function ScreenBase:AddOnClickListener( obj, action)
+    if obj then
+        obj.onClick:AddListener(action)
+        if not self.allOnClickObjs[obj] then
+            self.allOnClickObjs[obj] = true
+        end 
+    end
 end
 
 return ScreenBase

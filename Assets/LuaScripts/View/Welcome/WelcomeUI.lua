@@ -6,11 +6,7 @@
 local WelcomeUI = class("Welcome",ScreenBase)
 
 function WelcomeUI:BindAction()
-    self.uiCtrl.btnTouchArea.onClick:AddListener(handler(self,self.OnOpenMainMenuClick))
-end
-
-function WelcomeUI:UnBindAction()
-    self.uiCtrl.btnTouchArea.onClick:RemoveListener(handler(self,self.OnOpenMainMenuClick))
+    self:AddOnClickListener(self.uiCtrl.btnTouchArea,handler(self,self.OnOpenMainMenuClick))
 end
 
 function WelcomeUI:OnOpenMainMenuClick()

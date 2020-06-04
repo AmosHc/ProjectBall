@@ -68,6 +68,7 @@ function UIManager:OpenUI(uiName,data)
         if ui:GetCtrlBase() and not ui:GetCtrlBase().ctrlCanvas.enabled then
             ui:GetCtrlBase().ctrlCanvas.enabled = true
         end
+        ui.data = data
         ui:Show()
     else
         ui = require(uiConfig.luaPath).New(UI_RES_PREFIX..uiConfig.uiResPath,uiName,data) --界面是唯一的，单例
