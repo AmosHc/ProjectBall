@@ -1,13 +1,11 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
 using XLua;
 
-[CSharpCallLua]
 public delegate void ReloadDelegate(string path);
 
 public  class LuaFileWatcher
@@ -18,12 +16,14 @@ public  class LuaFileWatcher
     
     public static void CreateLuaFileWatcher(LuaEnv luaEnv)
     {
+#if UNITY_EDITOR
         var scriptPath = Path.Combine(Application.dataPath, "LuaScripts");
         var directoryWatcher =
             new DirectoryWatcher(scriptPath, new FileSystemEventHandler(LuaFileOnChanged));
         ReloadFunction = luaEnv.Global.Get<ReloadDelegate>("hotfix");
         EditorApplication.update -= Reload;
         EditorApplication.update += Reload;
+#endif
     }
 
     private static void LuaFileOnChanged(object obj, FileSystemEventArgs args)
@@ -39,7 +39,8 @@ public  class LuaFileWatcher
 
     private static void Reload()
     {
-        if (EditorApplication.isPlaying == false)
+#if UNITY_EDITOR
+        if (UnityEditor.EditorApplication.isPlaying == false)
         {
             return;
         }
@@ -54,5 +55,6 @@ public  class LuaFileWatcher
             Debug.Log("Reload:" + file);
         }
         _changedFiles.Clear();
+#endif
     }
 }

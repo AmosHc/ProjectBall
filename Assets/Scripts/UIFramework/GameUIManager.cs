@@ -39,7 +39,7 @@ public class GameUIManager : MonoSingleton<GameUIManager>
     protected override void Init()
     {
         // 初始化UI根节点
-        uiRoot = Instantiate(Resources.Load<GameObject>("UIRoot"), transform);
+        uiRoot = Instantiate(Resources.Load<GameObject>("UGUI/UIRoot"), transform);
         uiCamera = uiRoot.GetComponent<Canvas>().worldCamera;
 
         // 初始化UI缓存池

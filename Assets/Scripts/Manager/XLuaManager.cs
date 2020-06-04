@@ -4,7 +4,6 @@ using UnityEngine;
 using XLua;
 
 [Hotfix]
-[LuaCallCSharp]
 public class XLuaManager : MonoSingleton<XLuaManager>
 {
     public  const string luaScriptsFolder = "LuaScripts";
@@ -28,7 +27,9 @@ public class XLuaManager : MonoSingleton<XLuaManager>
         base.Init();
         _luaEnv = new LuaEnv();
         _luaEnv.AddLoader(CustomLoader);
+#if UNITY_EDITOR
         LoadScript(hotfixScriptName);
+#endif
     }
 
     public void StartGame()

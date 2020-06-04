@@ -23,7 +23,7 @@ public class MaskScreenManager
     {
         if (goAutoMask == null)
         {
-            ResourcesMgr.GetInstance().LoadAsset("UIAutoMask", (ao) => {
+            ResourcesMgr.GetInstance().LoadAsset("UGUI/UIAutoMask", (ao) => {
                 goAutoMask = ao;
                 AttachEvent(screen);
             });

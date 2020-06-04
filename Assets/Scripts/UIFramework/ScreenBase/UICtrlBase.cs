@@ -24,7 +24,6 @@ public enum EUICareAboutMoneyType
     Gem// 钻石
 }
 
-[CSharpCallLua]
 public class UICtrlBase : UIFEventAutoRelease
 {
     [HideInInspector]

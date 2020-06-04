@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using XLua;
 
-[CSharpCallLua]
 public class EventManager
 {
     //public static FEvent OnGuildCreated = new FEvent);   //创建公会成功

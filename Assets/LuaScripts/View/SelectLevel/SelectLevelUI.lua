@@ -29,7 +29,7 @@ function SelectLevelUI:InitLevels(obj)
     if not self.data then
         return
     end
-    for idx, levelID in ipairs(self.data.levels) do
+    for _, levelID in ipairs(self.data.levels) do
         local level = self.levelsCfg[levelID]
         local levelItem = Object.Instantiate(obj, self.uiCtrl.groupLevels.transform);
         levelItem.transform.localScale = Vector3.one;

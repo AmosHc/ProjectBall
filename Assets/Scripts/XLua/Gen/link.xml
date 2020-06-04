@@ -3,7 +3,9 @@
 <linker>
 
 	<assembly fullname="Assembly-CSharp">
-	    <type fullname="XLuaManager" preserve="all"/>
+	    <type fullname="UICtrlBase" preserve="all"/>
+		<type fullname="EventManager" preserve="all"/>
+		<type fullname="XLuaManager" preserve="all"/>
 		<type fullname="Tutorial.BaseClass" preserve="all"/>
 		<type fullname="Tutorial.TestEnum" preserve="all"/>
 		<type fullname="Tutorial.DerivedClass" preserve="all"/>

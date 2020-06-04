@@ -22,6 +22,12 @@ namespace XLua.CSObjectWrap
         static void wrapInit0(LuaEnv luaenv, ObjectTranslator translator)
         {
         
+            translator.DelayWrapLoader(typeof(UICtrlBase), UICtrlBaseWrap.__Register);
+        
+        
+            translator.DelayWrapLoader(typeof(EventManager), EventManagerWrap.__Register);
+        
+        
             translator.DelayWrapLoader(typeof(XLuaManager), XLuaManagerWrap.__Register);
         
         
@@ -168,9 +174,11 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(Tutorial.DerivedClass.TestEnumInner), TutorialDerivedClassTestEnumInnerWrap.__Register);
         
-        
-        
         }
+        
+        
+        
+        
         
         static void Init(LuaEnv luaenv, ObjectTranslator translator)
         {
