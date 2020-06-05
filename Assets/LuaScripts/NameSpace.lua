@@ -55,3 +55,6 @@ Text = CS.UnityEngine.UI.Text
 UICtrlBase = CS.UICtrlBase
 ESceenPriority = CS.ESceenPriority
 EUICareAboutMoneyType = CS.EUICareAboutMoneyType
+PointerEventData = CS.UnityEngine.EventSystems.PointerEventData
+EventSystem = CS.UnityEngine.EventSystems.EventSystem
+RaycastResult = CS.UnityEngine.EventSystems.RaycastResult

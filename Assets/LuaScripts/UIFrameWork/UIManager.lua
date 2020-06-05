@@ -186,4 +186,13 @@ function UIManager:GetUICamera()
     return self.uiCamera;
 end
 
+function UIManager:IsTouchUI(rayCast)
+    local eventData = PointerEventData(EventSystem.current)
+    eventData.pressPosition = Input.mousePosition
+    eventData.position = Input.mousePosition
+    local rayCastResult = {}
+    rayCast:Raycast(eventData,rayCastResult)
+    return rayCastResult.Count > 0
+end
+
 return UIManager
