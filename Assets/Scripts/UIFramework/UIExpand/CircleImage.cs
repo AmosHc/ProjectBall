@@ -12,6 +12,8 @@ public class CircleImage : Image
     public float fillPercent = 1;//显示百分比
     
     private readonly Color32 GRAY_COLOR = new Color32(60,60,60,255);
+
+    private List<Vector3> _vertexList;
     
     protected override void OnPopulateMesh(VertexHelper toFill)
     {
@@ -59,6 +61,7 @@ public class CircleImage : Image
 
     private void SetCircleVert(Vector2 uvCenter,Vector2 convertRatio,VertexHelper toFill,float radius,int readSegments,Vector3 originPos)
     {
+        _vertexList = new List<Vector3>();
         //初始化角度
         float segmentAngle = Mathf.PI * 2 / segments;
         float curAngle = 0;
@@ -81,6 +84,7 @@ public class CircleImage : Image
 
             circleVert = new Vector3(x, y, 0);
             vertex.position = circleVert + originPos;
+            _vertexList.Add(vertex.position);
             vertex.uv0 = new Vector2(convertRatio.x * circleVert.x + uvCenter.x,convertRatio.y * circleVert.y + uvCenter.y);
             toFill.AddVert(vertex);
         }
@@ -98,6 +102,59 @@ public class CircleImage : Image
     {
         Vector2 localPoint;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, screenPoint, eventCamera, out localPoint);
-        return false;
+        return IsValid(localPoint);
+    }
+
+    private bool IsValid(Vector2 inputPoint)
+    {
+        return GetCrossPointNum(inputPoint,_vertexList) % 2 == 1;
+    }
+
+    private int GetCrossPointNum(Vector2 inputPoint, List<Vector3> vertexList)
+    {
+        if (vertexList == null)
+        {
+            Debug.LogError("vertexList is Null!");
+            return 0;
+        }
+        Vector3 vert1 = Vector3.zero;
+        Vector3 vert2 = Vector3.zero;
+        int count = vertexList.Count;
+
+        int crossNum = 0;
+        for (int i = 0; i < count; i++)
+        {
+            vert1 = vertexList[i];
+            vert2 = vertexList[(i + 1) % count];
+            if (CheckPointYInRange(inputPoint, vert1, vert2))
+            {
+                if (CheckPointXValid(inputPoint, vert1, vert2))
+                {
+                    crossNum++;
+                }
+            }
+        }
+        return crossNum;
+    }
+
+    private bool CheckPointYInRange(Vector2 inputPoint, Vector3 vert1, Vector3 vert2)
+    {
+        if (vert1.y > vert2.y)
+        {
+            return vert1.y >= inputPoint.y && vert2.y <= inputPoint.y;
+        }
+        else
+        {
+            return vert2.y >= inputPoint.y && vert1.y <= inputPoint.y;
+        }
+    }
+
+    private bool CheckPointXValid(Vector2 inputPoint, Vector3 vert1, Vector3 vert2)
+    {
+        //y = kx + b  k = y1-y2/x1-x2
+        float k = (vert1.y - vert2.y) / (vert1.x - vert2.x);
+        float b = vert1.y - (vert1.x * k);
+        float x0 = ((inputPoint.y) - b) / k; //线段上和直线相交的点(x0,y0)，y0 = inputPoint.y
+        return x0 >= inputPoint.x;//向右判断相交
     }
 }
