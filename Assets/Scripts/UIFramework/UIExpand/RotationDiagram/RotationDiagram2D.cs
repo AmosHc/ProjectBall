@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Security;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
@@ -14,16 +17,20 @@ public class RotationDiagram2D : MonoBehaviour
     public float offset;
     public float scaleFactorMax;
     public float scaleFactorMin;
-    
+
     private List<RotationDiagramItem> _diagramItems;
     private List<ItemPosData> _posDatas;
+    private List<int> _sortItemIds;
     
     void Start()
     {
         _diagramItems = new List<RotationDiagramItem>();
         _posDatas = new List<ItemPosData>();
+        _sortItemIds = new List<int>();
+        
         CreateItems();
         CalculateData();
+        SetItemDatas();
     }
 
     private GameObject CreateTemplate()
@@ -97,18 +104,83 @@ public class RotationDiagram2D : MonoBehaviour
         float ratio = 0;
         for (int i = 0; i < _diagramItems.Count; i++)
         {
-            ItemPosData posData = new ItemPosData();
-            posData.X = GetPosX(ratio, length);
-            posData.ScaleFactor = GetScaleFactor(ratio, scaleFactorMax, scaleFactorMin);
-            _diagramItems[i].SetPosData(posData);
-            _posDatas.Add(posData);
+            _sortItemIds.Add(i);
+            AddItemPosDate(ratio, length);
+            _diagramItems[i].PosId = i;
             ratio += ratioOffsets;
+        }
+        _sortItemIds = _sortItemIds.OrderBy((i => _posDatas[i].ScaleFactor)).ToList();
+        for (int i = 0; i < _sortItemIds.Count; i++)
+        {
+            _posDatas[_sortItemIds[i]].Order = i;
+        }
+    }
+
+    private ItemPosData AddItemPosDate(float ratio, float length)
+    {
+        ItemPosData posData = new ItemPosData();
+        posData.X = GetPosX(ratio, length);
+        posData.ScaleFactor = GetScaleFactor(ratio, scaleFactorMax, scaleFactorMin);
+        _posDatas.Add(posData);
+        return posData;
+    }
+
+    private void SetItemDatas()
+    {
+        for (int i = 0; i < _diagramItems.Count; i++)
+        {
+            _diagramItems[i].InitPosData(_posDatas[i]);
+            _diagramItems[i].AddMoveListener(OnChange);
+        }
+    }
+
+    private void OnChange(float moveOffset)
+    {
+        if (moveOffset < 0.05f && moveOffset > -0.05f) 
+            return;
+        int dir = moveOffset > 0 ? 1 : -1;
+        OnChange(dir);
+    }
+    
+    /// <summary>
+    /// 正数+负数-
+    /// </summary>
+    /// <param name="dir"></param>
+    private void OnChange(int dir)
+    {
+        for (int i = 0; i < _diagramItems.Count; i++)
+        {
+            _diagramItems[i].ChangeIndex(dir,_diagramItems.Count);
+        }
+
+        for (int i = 0; i < _diagramItems.Count; i++)
+        {
+            _diagramItems[i].SetPosData(_posDatas[_diagramItems[i].PosId]);
         }
     }
 }
 
-public struct ItemPosData
+public class ItemPosData
 {
-    public float X;
-    public float ScaleFactor;
+    private float _x;
+    private float _scaleFactor;
+    private int _order = 0;
+
+    public float X
+    {
+        get => _x;
+        set => _x = value;
+    }
+
+    public float ScaleFactor
+    {
+        get => _scaleFactor;
+        set => _scaleFactor = value;
+    }
+
+    public int Order
+    {
+        get => _order;
+        set => _order = value;
+    }
 }

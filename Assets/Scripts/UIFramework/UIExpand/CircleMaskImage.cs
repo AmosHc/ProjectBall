@@ -4,7 +4,10 @@ using UnityEngine;
 using UnityEngine.Sprites;
 using UnityEngine.UI;
 
-public class CircleImage : Image
+/// <summary>
+/// 圆形遮罩
+/// </summary>
+public class CircleMaskImage : Image
 {
     [SerializeField]
     public int segments = 100;//切割份数

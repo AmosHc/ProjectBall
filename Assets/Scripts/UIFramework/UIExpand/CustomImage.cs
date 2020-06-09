@@ -4,6 +4,9 @@ using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 自定义不规则多边形点击区域组件
+/// </summary>
 public class CustomImage : Image
 {
     private PolygonCollider2D _polygon;
