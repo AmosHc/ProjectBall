@@ -10,9 +10,9 @@ using UnityEngine.UI;
 public class CircleMaskImage : Image
 {
     [SerializeField]
-    public int segments = 100;//切割份数
+    private int segments = 100;//切割份数
     [SerializeField]
-    public float fillPercent = 1;//显示百分比
+    private float fillPercent = 1;//显示百分比
     
     private readonly Color32 GRAY_COLOR = new Color32(60,60,60,255);
 

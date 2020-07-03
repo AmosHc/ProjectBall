@@ -8,5 +8,6 @@ public class GameManager : MonoSingleton<GameManager>
     {
         XLuaManager.GetInstance().StartGame();
         LuaFileWatcher.CreateLuaFileWatcher(XLuaManager.GetInstance().luaEnv);
+        SceneUnitPoolManager.GetInstance().Create();
     }
 }
