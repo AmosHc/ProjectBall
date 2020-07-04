@@ -40,6 +40,11 @@ public class MonoSingleton<T> : MonoBehaviour where T : Component
         return _instance;
     }
 
+    public virtual void Create()
+    {
+        
+    }
+
     /// <summary>
     ///     删除单件实例,这种继承关系的单件生命周期应该由模块显示管理
     /// </summary>
@@ -113,5 +118,35 @@ public class MonoSingleton<T> : MonoBehaviour where T : Component
     public virtual void Dispose()
     {
 
+    }
+    
+    public virtual void OnTerminate()
+    {
+
+    }
+    
+    public virtual void OnPause()
+    {
+
+    }
+
+    void OnApplicationQuit()
+    {
+        MonoSingleton<T> ins = _instance as MonoSingleton<T>;
+        if (_instance)
+        {
+            ins.OnTerminate();
+        }
+        _instance = null;
+    }
+
+    void OnApplicationPause()
+    {
+        
+        MonoSingleton<T> ins = _instance as MonoSingleton<T>;
+        if (_instance)
+        {
+            ins.OnPause();
+        }
     }
 };

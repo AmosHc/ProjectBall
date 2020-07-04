@@ -22,7 +22,7 @@ public class RadarChartHandler : MonoBehaviour
 
     private RectTransform _rect;
 
-    private RectTransform Rect
+    public RectTransform Rect
     {
         get
         {
