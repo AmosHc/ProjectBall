@@ -21,23 +21,25 @@ function SelectLevelUI:OnShow()
     ResourcesMgr.GetInstance():LoadAsset(UI_RES_PREFIX.."SelectLevel/btnLevel", handler(self,self.InitLevels))
 end
 
-function SelectLevelUI:OnStartGameClick()
-    log("开始游戏")
+function SelectLevelUI:OnStartGameClick(levelCfg)
+    UIMgr:OpenUI("GameScreen",levelCfg)
 end
 
 function SelectLevelUI:InitLevels(obj)
     if not self.data then
         return
     end
-    for _, levelID in ipairs(self.data.levels) do
-        local level = self.levelsCfg[levelID]
-        local levelItem = Object.Instantiate(obj, self.uiCtrl.groupLevels.transform);
-        levelItem.transform.localScale = Vector3.one;
-        levelItem.transform:Find("Text"):GetComponent(typeof(Text)).text = level.LevelName
-        local btn = levelItem:GetComponent(typeof(Button))
-        self:AddOnClickListener(btn,handler(self,self.OnStartGameClick))
-        self.uiCtrl.btnLevels:Add(btn)
-    end
+    CommonUtility:RefreshList(self.uiCtrl.groupLevels.transform,obj,self.data.levels,handler(self,self.ListItemRender))
+end
+
+function SelectLevelUI:ListItemRender(idx,item,levelID)
+    local levelCfg = GameConfig.LevelsByLevelID[levelID]
+    item.transform:Find("Text"):GetComponent(typeof(Text)).text = levelCfg.LevelName
+    local btn = item:GetComponent(typeof(Button))
+    self:AddOnClickListener(btn,handler(self,function ()
+        self:OnStartGameClick(levelCfg)
+    end))
+    --self.uiCtrl.btnLevels:Add(btn)
 end
 
 return SelectLevelUI
