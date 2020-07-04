@@ -8,7 +8,8 @@ tabtoy.exe ^
 --lan=zh_cn ^
 ./Excels/Globals.xlsx ^
 ./Excels/ThemeChooser.xlsx ^
-./Excels/Levels.xlsx
+./Excels/Levels.xlsx ^
+./Excels/Agencys.xlsx
 
 @IF %ERRORLEVEL% NEQ 0 pause
 rem pause

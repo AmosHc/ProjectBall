@@ -11,4 +11,5 @@ return {
     ["MainMenuUI"] = {uiResPath="MainMenu",uiName="MainMenuUI",luaPath = "View/MainMenu/MainMenuUI"}, --主菜单
     ["ThemeChooserUI"] = {uiResPath="ThemeChooser",uiName="ThemeChooserUI",luaPath = "View/ThemeChooser/ThemeChooserUI"}, --一级选关
     ["SelectLevelUI"] = {uiResPath="SelectLevel/SelectLevel",uiName="SelectLevelUI",luaPath = "View/SelectLevel/SelectLevelUI"}, --二级选关
+    ["GameScreen"] =  {uiResPath="Game/Game",uiName="GameScreen",luaPath = "View/Game/GameScreen"},--游戏主界面
 }

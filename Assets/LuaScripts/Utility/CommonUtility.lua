@@ -1030,4 +1030,26 @@ function CommonUtility:PlayVoice(show, vo)
 	end
 end
 
+
+-------------------------------------------------------
+--rendererHandler 渲染函数参数 rendererHandler(idx,item,data,args)
+function CommonUtility:RefreshList(root,child,datas,rendererHandler,args) --TODO 需要优化成pool
+	local cnt = #datas
+	local oldCnt = root.childCount
+	for i=oldCnt,1,-1 do
+		local item = root:GetChild(i-1)
+		if i > cnt then
+			Object.Destroy(item)
+		elseif rendererHandler then
+			rendererHandler( i, item, datas[i], args )
+		end
+	end
+	for i=oldCnt+1,cnt do
+		local item = Object.Instantiate(child, root);
+		if rendererHandler then
+			rendererHandler( i, item, datas[i], args )
+		end
+	end
+end
+
 return CommonUtility

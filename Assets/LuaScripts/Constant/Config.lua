@@ -9,21 +9,27 @@ local tab = {
 	}, 
 
 	Levels = {
-		{ LevelID = 1, ownerIndex = 1, IconUrl = "url", LevelName = "第1关" 	},
-		{ LevelID = 2, ownerIndex = 1, IconUrl = "url", LevelName = "第2关" 	},
-		{ LevelID = 3, ownerIndex = 1, IconUrl = "url", LevelName = "第3关" 	},
-		{ LevelID = 4, ownerIndex = 1, IconUrl = "url", LevelName = "第4关" 	},
-		{ LevelID = 5, ownerIndex = 1, IconUrl = "url", LevelName = "第5关" 	},
-		{ LevelID = 6, ownerIndex = 2, IconUrl = "url", LevelName = "第6关" 	},
-		{ LevelID = 7, ownerIndex = 2, IconUrl = "url", LevelName = "第7关" 	},
-		{ LevelID = 8, ownerIndex = 2, IconUrl = "url", LevelName = "第8关" 	},
-		{ LevelID = 9, ownerIndex = 2, IconUrl = "url", LevelName = "第9关" 	},
-		{ LevelID = 10, ownerIndex = 2, IconUrl = "url", LevelName = "第10关" 	},
-		{ LevelID = 11, ownerIndex = 3, IconUrl = "url", LevelName = "第11关" 	},
-		{ LevelID = 12, ownerIndex = 3, IconUrl = "url", LevelName = "第12关" 	},
-		{ LevelID = 13, ownerIndex = 3, IconUrl = "url", LevelName = "第13关" 	},
-		{ LevelID = 14, ownerIndex = 3, IconUrl = "url", LevelName = "第14关" 	},
-		{ LevelID = 15, ownerIndex = 3, IconUrl = "url", LevelName = "第15关" 	}
+		{ LevelID = 1, ownerIndex = 1, IconUrl = "url", LevelName = "第1关", SpawnPoint = { X= -9.714, Y= 4.71 }, EndPoint = { X= 9.332, Y= -5.603 }, ConstAgencys = {  }, Agencys = { 1, 2, 3 } 	},
+		{ LevelID = 2, ownerIndex = 1, IconUrl = "url", LevelName = "第2关", SpawnPoint = { X= -9.714, Y= 4.72 }, EndPoint = { X= 9.332, Y= -5.604 }, ConstAgencys = {  }, Agencys = { 1, 2, 3 } 	},
+		{ LevelID = 3, ownerIndex = 1, IconUrl = "url", LevelName = "第3关", SpawnPoint = { X= -9.714, Y= 4.73 }, EndPoint = { X= 9.332, Y= -5.605 }, ConstAgencys = {  }, Agencys = { 1, 2, 3 } 	},
+		{ LevelID = 4, ownerIndex = 1, IconUrl = "url", LevelName = "第4关", SpawnPoint = { X= -9.714, Y= 4.74 }, EndPoint = { X= 9.332, Y= -5.606 }, ConstAgencys = {  }, Agencys = { 1, 2, 3 } 	},
+		{ LevelID = 5, ownerIndex = 1, IconUrl = "url", LevelName = "第5关", SpawnPoint = { X= -9.714, Y= 4.75 }, EndPoint = { X= 9.332, Y= -5.607 }, ConstAgencys = {  }, Agencys = { 1, 2, 3 } 	},
+		{ LevelID = 6, ownerIndex = 2, IconUrl = "url", LevelName = "第6关", SpawnPoint = { X= -9.714, Y= 4.76 }, EndPoint = { X= 9.332, Y= -5.608 }, ConstAgencys = {  }, Agencys = { 1, 2, 3 } 	},
+		{ LevelID = 7, ownerIndex = 2, IconUrl = "url", LevelName = "第7关", SpawnPoint = { X= -9.714, Y= 4.77 }, EndPoint = { X= 9.332, Y= -5.609 }, ConstAgencys = {  }, Agencys = { 1, 2, 3 } 	},
+		{ LevelID = 8, ownerIndex = 2, IconUrl = "url", LevelName = "第8关", SpawnPoint = { X= -9.714, Y= 4.78 }, EndPoint = { X= 9.332, Y= -5.610 }, ConstAgencys = {  }, Agencys = { 1, 2, 3 } 	},
+		{ LevelID = 9, ownerIndex = 2, IconUrl = "url", LevelName = "第9关", SpawnPoint = { X= -9.714, Y= 4.79 }, EndPoint = { X= 9.332, Y= -5.611 }, ConstAgencys = {  }, Agencys = { 1, 2, 3 } 	},
+		{ LevelID = 10, ownerIndex = 2, IconUrl = "url", LevelName = "第10关", SpawnPoint = { X= -9.714, Y= 4.80 }, EndPoint = { X= 9.332, Y= -5.612 }, ConstAgencys = {  }, Agencys = { 1, 2, 3 } 	},
+		{ LevelID = 11, ownerIndex = 3, IconUrl = "url", LevelName = "第11关", SpawnPoint = { X= -9.714, Y= 4.81 }, EndPoint = { X= 9.332, Y= -5.613 }, ConstAgencys = {  }, Agencys = { 1, 2, 3 } 	},
+		{ LevelID = 12, ownerIndex = 3, IconUrl = "url", LevelName = "第12关", SpawnPoint = { X= -9.714, Y= 4.82 }, EndPoint = { X= 9.332, Y= -5.614 }, ConstAgencys = {  }, Agencys = { 1, 2, 3 } 	},
+		{ LevelID = 13, ownerIndex = 3, IconUrl = "url", LevelName = "第13关", SpawnPoint = { X= -9.714, Y= 4.83 }, EndPoint = { X= 9.332, Y= -5.615 }, ConstAgencys = {  }, Agencys = { 1, 2, 3 } 	},
+		{ LevelID = 14, ownerIndex = 3, IconUrl = "url", LevelName = "第14关", SpawnPoint = { X= -9.714, Y= 4.84 }, EndPoint = { X= 9.332, Y= -5.616 }, ConstAgencys = {  }, Agencys = { 1, 2, 3 } 	},
+		{ LevelID = 15, ownerIndex = 3, IconUrl = "url", LevelName = "第15关", SpawnPoint = { X= -9.714, Y= 4.85 }, EndPoint = { X= 9.332, Y= -5.617 }, ConstAgencys = {  }, Agencys = { 1, 2, 3 } 	}
+	}, 
+
+	Agencys = {
+		{ ID = 1, AgencyName = "棒子", AgencyResUrl = "Sprite/GameAgencys/Line", ScaleMax = { X= 10, Y= 10, Z= 10 }, ScaleMin = { X= 1, Y= 1, Z= 1 } 	},
+		{ ID = 2, AgencyName = "摩天轮", AgencyResUrl = "Sprite/GameAgencys/FerrisWheel", ScaleMax = { X= 10, Y= 10, Z= 11 }, ScaleMin = { X= 1, Y= 1, Z= 2 } 	},
+		{ ID = 3, AgencyName = "楼梯哒哒哒", AgencyResUrl = "Sprite/GameAgencys/Stairs", ScaleMax = { X= 10, Y= 10, Z= 12 }, ScaleMin = { X= 1, Y= 1, Z= 3 } 	}
 	}
 
 }
@@ -45,6 +51,12 @@ end
 tab.LevelsByownerIndex = {}
 for _, rec in pairs(tab.Levels) do
 	tab.LevelsByownerIndex[rec.ownerIndex] = rec
+end
+
+-- ID
+tab.AgencysByID = {}
+for _, rec in pairs(tab.Agencys) do
+	tab.AgencysByID[rec.ID] = rec
 end
 
 tab.Enum = {

@@ -33,6 +33,7 @@ GCTool = require ("Utility/GCTool")
 inWindowsEditor = Application.platform == RuntimePlatform.WindowsEditor
 utable = require ("Utility/TableUtility")
 UIMgr = require ("UIFrameWork/UIManager"):Create()
+CommonUtility = require("Utility/CommonUtility").New()
 PlayerData = require("Constant/PlayerData").New()
 
 math.pow = function(num1,num2)

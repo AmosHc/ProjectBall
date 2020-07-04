@@ -5,8 +5,9 @@
 ---
 local SubScreenBase = class("SubScreenBase")
 
-function SubScreenBase:ctor(subCtrl)
+function SubScreenBase:ctor(subCtrl,param)
     self.uiCtrl = subCtrl
+    self.data = param
     self:Init()
 end
 
