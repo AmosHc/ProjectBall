@@ -29,6 +29,7 @@ end
 --EventDispatcherCls = require "Core/EventDispatcher"
 --EventDispatcher = EventDispatcherCls.new()
 GameConfig = require ("Constant/Config") --全局唯一的配置表
+require ("Constant/Enums")
 GCTool = require ("Utility/GCTool")
 inWindowsEditor = Application.platform == RuntimePlatform.WindowsEditor
 utable = require ("Utility/TableUtility")

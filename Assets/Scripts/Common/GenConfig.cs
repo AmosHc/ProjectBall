@@ -25,6 +25,7 @@ public static class GenConfig
                 typeof(EventManager),
                 typeof(XLuaManager),
                 typeof(EventManager),
+                typeof(MapSceneManager),
         //system
                 typeof(System.Object),
                 typeof(UnityEngine.Object),
