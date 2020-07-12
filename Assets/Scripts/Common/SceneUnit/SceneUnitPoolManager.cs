@@ -28,7 +28,7 @@ public class SceneUnitPool : PoolBase<SceneUnit>
 {
     public SceneUnitPool()
     {
-        Init("------------SceneUnitPool------------");
+        Init("-----SceneUnitPool-----");
     }
 
     public override SceneUnit CreateItem()

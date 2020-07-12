@@ -5,28 +5,36 @@ using UnityEngine;
 
 public enum UnitClassType
 {
-    player = 1,//玩家
-    monster = 2,//怪物
-    boss = 3,//Boss
+    Ball = 1,//玩家
+    StaticAgency = 2,//静态机关
+    DynamicAgency = 3,//动态机关
+    Star = 4,//星
 }
 
 public class MapSceneManager : MonoSingleton<MapSceneManager>
 {
-    public SceneUnit CreateSceneUnit(int inType, int baseID, string resPath, Vector3 position, Quaternion rotation,
-        int pointID, float colliderRadius = 0.5f, float colliderHeight = 2, float size = 1)
+    public SceneUnit CreateSceneUnit(int inType, int baseID, string resPath, Vector3 position, Quaternion rotation,float size = 1)
     {
         UnitClassType type = (UnitClassType) (inType);
+        return CreateSceneUnit(type, baseID, resPath, position, rotation, size = 1);
+    }
+
+    public SceneUnit CreateSceneUnit(UnitClassType type, int baseID, string resPath, Vector3 position, Quaternion rotation,float size = 1)
+    {
         SceneUnit sceneUnit = null;
         switch (type)
         {
-            case UnitClassType.player:
-                sceneUnit = CreateScenePlayer(baseID,resPath,position,rotation);
+            case UnitClassType.Ball:
+                sceneUnit = CreateSceneBall(baseID,resPath,position,rotation);
                 break;
-            case UnitClassType.monster:
-                sceneUnit = CreateSceneMonster(baseID,resPath,position,rotation);
+            case UnitClassType.StaticAgency:
+                sceneUnit = CreateSceneStaticAgency(baseID,resPath,position,rotation);
                 break;
-            case UnitClassType.boss:
-                sceneUnit = CreateSceneBoss(baseID,resPath,position,rotation);
+            case UnitClassType.DynamicAgency:
+                sceneUnit = CreateSceneDynamicAgency(baseID,resPath,position,rotation);
+                break;
+            case UnitClassType.Star:
+                sceneUnit = CreateSceneStar(baseID,resPath,position,rotation);
                 break;
         }
 
@@ -38,7 +46,32 @@ public class MapSceneManager : MonoSingleton<MapSceneManager>
         return sceneUnit;
     }
 
-    private SceneUnit CreateScenePlayer(int uniID, string resPath, Vector3 position, Quaternion rotation)
+    private SceneUnit CreateSceneBall(int uniID, string resPath, Vector3 position, Quaternion rotation)
+    {
+        SceneUnit u = SceneUnitPoolManager.GetInstance().Spawn();
+
+        u.gameObject.name = "Ball";
+        u.transform.position = position;
+        u.transform.rotation = rotation;
+        u.gameObject.layer = LayerMask.NameToLayer("Ball");
+        u.IsPlayer = true;
+        u.Init(uniID);
+        return u;
+    }
+    
+    private SceneUnit CreateSceneStaticAgency(int uniID, string resPath, Vector3 position, Quaternion rotation)
+    {
+        SceneUnit u = SceneUnitPoolManager.GetInstance().Spawn();
+
+        u.gameObject.name = "Fighter";
+        u.transform.position = position;
+        u.transform.rotation = rotation;
+        u.gameObject.layer = LayerMask.NameToLayer("Unit");
+        u.Init(uniID);
+        return u;
+    }
+    
+    private SceneUnit CreateSceneDynamicAgency(int uniID, string resPath, Vector3 position, Quaternion rotation)
     {
         SceneUnit u = SceneUnitPoolManager.GetInstance().Spawn();
 
@@ -51,19 +84,8 @@ public class MapSceneManager : MonoSingleton<MapSceneManager>
         return u;
     }
     
-    private SceneUnit CreateSceneMonster(int uniID, string resPath, Vector3 position, Quaternion rotation)
-    {
-        SceneUnit u = SceneUnitPoolManager.GetInstance().Spawn();
-
-        u.gameObject.name = "Fighter";
-        u.transform.position = position;
-        u.transform.rotation = rotation;
-        u.gameObject.layer = LayerMask.NameToLayer("Unit");
-        u.Init(uniID);
-        return u;
-    }
     
-    private SceneUnit CreateSceneBoss(int uniID, string resPath, Vector3 position, Quaternion rotation)
+    private SceneUnit CreateSceneStar(int uniID, string resPath, Vector3 position, Quaternion rotation)
     {
         SceneUnit u = SceneUnitPoolManager.GetInstance().Spawn();
 

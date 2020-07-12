@@ -14,13 +14,12 @@ public class SceneUnit : PoolItemBase
     private CapsuleCollider _collider;
     private Rigidbody _rigidbody;
     private AudioSource _audioSource;
-    private Transform _markNameTras;
     private GameObject _root;
     
-    private string _name = "";
     private int _Id;
-    private bool _isPlayer = false;
-    private bool _isNpc = false;
+    
+    private bool _isPlayer;
+    private bool _isStatic;
     private bool _isTrigger = false;
 
     public virtual void Init(int uniID)
@@ -49,45 +48,28 @@ public class SceneUnit : PoolItemBase
         _root = root;
     }
 
-    public void SetIsPlayer()
-    {
-        _isPlayer = true;
-        
-        _collider = gameObject.GetComponent<CapsuleCollider>();
-        _rigidbody = gameObject.GetComponent<Rigidbody>();
-        _name = gameObject.name;
-    }
-
-    public void SetIsNPC(string name = "")
-    {
-        _isNpc = true;
-        _audioSource = gameObject.GetComponent<AudioSource>();
-        _audioSource.mute = true;
-        _collider = gameObject.GetComponent<CapsuleCollider>();
-        _rigidbody = gameObject.GetComponent<Rigidbody>();
-        _markNameTras = gameObject.transform.Find("MarkName");
-        _name = name;
-    }
-
-    public string Name
-    {
-        get => _name;
-        set => _name = value;
-    }
+//    public void SetIsPlayer()
+//    {
+//        _isPlayer = true;
+//        
+//        _collider = gameObject.GetComponent<CapsuleCollider>();
+//        _rigidbody = gameObject.GetComponent<Rigidbody>();
+//        _name = gameObject.name;
+//    }
+//
+//    public void SetIsNPC(string name = "")
+//    {
+//        _isNpc = true;
+//        _audioSource = gameObject.GetComponent<AudioSource>();
+//        _audioSource.mute = true;
+//        _collider = gameObject.GetComponent<CapsuleCollider>();
+//        _rigidbody = gameObject.GetComponent<Rigidbody>();
+//        _name = name;
+//    }
 
     public bool IsPlayer
     {
         get => _isPlayer;
         set => _isPlayer = value;
-    }
-
-    public bool IsNpc
-    {
-        get => _isNpc;
-    }
-
-    public Transform markNameTras
-    {
-        get => _markNameTras;
     }
 }
