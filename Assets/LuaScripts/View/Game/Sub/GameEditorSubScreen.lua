@@ -9,20 +9,36 @@ function GameEditorSubScreen:Init()
     if not self.data then 
         return
     end
+    self.SelectAgencyID = false
     --local levelCfg = self.data
     ResourcesMgr.GetInstance():LoadAsset(UI_RES_PREFIX.."Game/btnOrganItem", handler(self,self.InitEditorAgencyList))
 end
 
+function GameEditorSubScreen:BindAction()
+    self:AddOnClickListener(self.uiCtrl.btnContentArea,self.OnClickContentArea)
+    
+end
+
 function GameEditorSubScreen:InitEditorAgencyList(obj)
     if obj then
-        CommonUtility:RefreshList(self.uiCtrl.rectListOrganEditor,obj,self.data.Agencys,self.ListItemRender)
+        CommonUtility:RefreshList(self.uiCtrl.rectListOrganEditor,obj,self.data.Agencys,handler(self,self.ListItemRender))
     else
         log("prefab "..UI_RES_PREFIX.."Game/btnOrganItem 加载失败")
     end
 end
 
-function GameEditorSubScreen.ListItemRender(idx,item,AgencyID)
-    log(AgencyID)
+function GameEditorSubScreen:ListItemRender(idx,item,AgencyID)
+    self:AddOnClickListener(item,handler(self,function ()
+        self:OnSelectedAgency(AgencyID)
+    end))
+end
+
+function GameEditorSubScreen:OnSelectedAgency(AgencyID)
+    self.SelectAgencyID = AgencyID
+end
+
+function GameEditorSubScreen:OnClickContentArea()
+    local sceneUnit = MapSceneManager:GetInstance():CreateSceneUnit(UnitClassTypeEnum.Ball,AgencyID,resPath,Vector3.zero,Quaternion.identity)
 end
 
 return GameEditorSubScreen
