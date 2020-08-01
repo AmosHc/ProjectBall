@@ -47,10 +47,12 @@ GameUIManager = CS.GameUIManager
 LuaHelper = CS.LuaHelper
 ResourcesMgr = CS.ResourcesMgr
 EventManager = CS.EventManager
+MapSceneManager = CS.MapSceneManager
 
 -----------------UI----------------------
 Canvas = CS.UnityEngine.Canvas
 Button = CS.UnityEngine.UI.Button
+Toggle = CS.UnityEngine.UI.Toggle
 Text = CS.UnityEngine.UI.Text
 UICtrlBase = CS.UICtrlBase
 ESceenPriority = CS.ESceenPriority

@@ -5,6 +5,7 @@
 ---
 local UIManager = {}
 local UICfg = require("Constant/UIConfig")
+UIBase = require ("UIFrameWork/ScreenBase/UIBase")
 ScreenBase = require ("UIFrameWork/ScreenBase/ScreenBase")
 SubScreenBase = require ("UIFrameWork/ScreenBase/SubScreenBase")
 MaskScreenManager = require ("UIFrameWork/MaskScreenManager")

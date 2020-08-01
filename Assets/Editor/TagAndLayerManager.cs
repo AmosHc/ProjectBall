@@ -63,6 +63,73 @@ public class TagAndLayerManager
         AssetDatabase.SaveAssets();
     }
 
+    #endregion
+
+    [MenuItem("GameTools/TagAndLayer管理器/GamePlayLayer")]
+    public static void AddGamePlayLayer()
+    {
+        List<string> enumsStrList = GetEnumsStrList(typeof(EUnitClassType));
+
+        SerializedObject tagManager = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset"));
+        if (tagManager == null)
+        {
+            Debug.LogError("未能序列化tagManager！！！！！！");
+            return;
+        }
+        SerializedProperty it = tagManager.GetIterator();
+        while (it.NextVisible(true))
+        {
+            if(it.name.Equals("layers"))
+            {
+                //前面8层是unity系统使用的层，所以要先过滤掉，因为下标3 6 7是空的，不过滤，会造成层设置成功，但却设置到unity系统使用的层之中，而不能使用。
+                AddLayerEnums(it, 8 , enumsStrList, typeof(EUnitClassType));
+            }
+        }
+        tagManager.ApplyModifiedProperties();
+        AssetDatabase.SaveAssets();
+    }
+
+    public static void AddLayerEnums(SerializedProperty it, int idx, List<string> enumsStrList, Type enumType)
+    {
+        for (int i = 0; i < enumsStrList.Count; i++)
+        {
+            SerializedProperty dataPoint = it.GetArrayElementAtIndex(idx + i);
+            if(string.IsNullOrEmpty(dataPoint.stringValue))
+            {
+                dataPoint.stringValue = enumsStrList[i];
+            }
+        }
+    }
+
+    public static List<string> GetEnumsStrList(Type enumType)
+    {
+        List<string> lstSceenPriority = new List<string>();
+        foreach(int v in Enum.GetValues(enumType))
+        {
+            lstSceenPriority.Add(Enum.GetName(enumType,v));
+        }
+
+        return lstSceenPriority;
+    }
+
+    [MenuItem("GameTools/TagAndLayer管理器/ClearLayers")]
+    public static void ClearLayers()
+    {
+        SerializedObject tagManager = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
+        if (tagManager == null)
+        {
+            Debug.LogError("未能序列化tagManager！！！！！！");
+            return;
+        }
+        SerializedProperty it = tagManager.GetIterator();
+        while(it.arraySize > 0)
+        {
+            it.DeleteArrayElementAtIndex(0);
+        }
+        tagManager.ApplyModifiedProperties();
+        AssetDatabase.SaveAssets();
+    }
+    
     public static bool IsHaveSortingLayer(string sortingLayer)
     {
         SerializedObject tagManager = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/Tagmanager.asset")[0]);
@@ -98,8 +165,6 @@ public class TagAndLayerManager
 
         return false;
     }
-
-    #endregion
 
 
 

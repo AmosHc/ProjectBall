@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum UnitClassType
+public enum EUnitClassType
 {
     Ball = 1,//玩家
     StaticAgency = 2,//静态机关
@@ -15,25 +15,25 @@ public class MapSceneManager : MonoSingleton<MapSceneManager>
 {
     public SceneUnit CreateSceneUnit(int inType, int baseID, string resPath, Vector3 position, Quaternion rotation,float size = 1)
     {
-        UnitClassType type = (UnitClassType) (inType);
+        EUnitClassType type = (EUnitClassType) (inType);
         return CreateSceneUnit(type, baseID, resPath, position, rotation, size = 1);
     }
 
-    public SceneUnit CreateSceneUnit(UnitClassType type, int baseID, string resPath, Vector3 position, Quaternion rotation,float size = 1)
+    public SceneUnit CreateSceneUnit(EUnitClassType type, int baseID, string resPath, Vector3 position, Quaternion rotation,float size = 1)
     {
         SceneUnit sceneUnit = null;
         switch (type)
         {
-            case UnitClassType.Ball:
+            case EUnitClassType.Ball:
                 sceneUnit = CreateSceneBall(baseID,resPath,position,rotation);
                 break;
-            case UnitClassType.StaticAgency:
+            case EUnitClassType.StaticAgency:
                 sceneUnit = CreateSceneStaticAgency(baseID,resPath,position,rotation);
                 break;
-            case UnitClassType.DynamicAgency:
+            case EUnitClassType.DynamicAgency:
                 sceneUnit = CreateSceneDynamicAgency(baseID,resPath,position,rotation);
                 break;
-            case UnitClassType.Star:
+            case EUnitClassType.Star:
                 sceneUnit = CreateSceneStar(baseID,resPath,position,rotation);
                 break;
         }
@@ -51,6 +51,7 @@ public class MapSceneManager : MonoSingleton<MapSceneManager>
         SceneUnit u = SceneUnitPoolManager.GetInstance().Spawn();
 
         u.gameObject.name = "Ball";
+        Debug.Log(position);
         u.transform.position = position;
         u.transform.rotation = rotation;
         u.gameObject.layer = LayerMask.NameToLayer("Ball");
@@ -89,10 +90,10 @@ public class MapSceneManager : MonoSingleton<MapSceneManager>
     {
         SceneUnit u = SceneUnitPoolManager.GetInstance().Spawn();
 
-        u.gameObject.name = "Player";
+        u.gameObject.name = "Star";
         u.transform.position = position;
         u.transform.rotation = rotation;
-        u.gameObject.layer = LayerMask.NameToLayer("Player");
+        u.gameObject.layer = LayerMask.NameToLayer("Star");
         u.IsPlayer = true;
         u.Init(uniID);
         return u;

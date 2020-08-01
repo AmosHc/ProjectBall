@@ -3,7 +3,7 @@
 --- Created by 54237.
 --- DateTime: 2020/5/30 9:30
 ---
-local ScreenBase = class("ScreenBase")
+local ScreenBase = class("ScreenBase",UIBase)
 
 function ScreenBase:ctor(uiRes,uiName,data)
     self.uiRes = uiRes
@@ -13,6 +13,7 @@ function ScreenBase:ctor(uiRes,uiName,data)
     self.openOrder = 0 -- 界面打开顺序
     self.sortingLayer = 0 -- 界面层级
     self.data = data --界面打开的传入参数
+    self.allSubScreens = {}
     
     self:InitBtnListenerTabs()
     self:StartLoad()
@@ -85,6 +86,17 @@ function ScreenBase:Show()
     self:OnShow()
 end
 
+function ScreenBase:RegisterSubScreen(subScreenInst)
+    if not self.allSubScreens then
+        logError("ScreenBase已被释放，不可添加subScreenInst")
+    end
+    if subScreenInst then
+        if not table.indexof(self.allSubScreens,subScreenInst) then
+            table.insert(self.allSubScreens,subScreenInst)
+        end
+    end
+end
+
 --设置渲染顺序
 function ScreenBase:SetOpenOrder(openOrder)
     self.openOrder = openOrder
@@ -100,6 +112,13 @@ end
 function ScreenBase:Dispose()
     self:OnDispose()
     GameObject.Destroy(self.panelRoot)
+end
+
+function ScreenBase:DisposeSunScreens()
+    for _, subInst in ipairs(self.allSubScreens) do
+        subInst:Dispose()
+    end
+    self.allSubScreens = nil
 end
 ---------- 所有公开接口,请勿自行添加与修改 ---------
 --公开复写接口,创建之后调用
@@ -122,31 +141,6 @@ function ScreenBase:OnDispose()
 end
 --公开复写接口,ui分辨率适配
 function ScreenBase:UIAdapt(width,height)
-end
-
-------------------复写事件，界面卸载时全部自动卸载事件，防止吊人漏卸---------------------
-function ScreenBase:InitBtnListenerTabs()
-    self.allOnClickObjs = {}
-end
-
-function ScreenBase:UnBindListenerAction()
-    self:RemoveOnClickListener()
-end
-
-function ScreenBase:RemoveOnClickListener()
-    for obj, _ in pairs(self.allOnClickObjs) do
-        obj.onClick:RemoveAllListeners()
-    end
-    self.allOnClickObjs = nil
-end
-
-function ScreenBase:AddOnClickListener( obj, action)
-    if obj then
-        obj.onClick:AddListener(action)
-        if not self.allOnClickObjs[obj] then
-            self.allOnClickObjs[obj] = true
-        end 
-    end
 end
 
 return ScreenBase

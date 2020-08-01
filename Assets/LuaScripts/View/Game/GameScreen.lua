@@ -17,8 +17,10 @@ function GameScreen:OnShow()
     --处理子界面逻辑初始化
     if isRunning then
         local _subRun = GameRunSubScreen.New(self.uiCtrl.subRun)
+        self:RegisterSubScreen(_subRun)
     else
         local _subEditor = GameEditorSubScreen.New(self.uiCtrl.subEditor,levelCfg)
+        self:RegisterSubScreen(_subEditor)
     end
 end
 
@@ -39,7 +41,6 @@ function GameScreen:OnGameRunning()
     --else
     --    local mSubCreate = GuildCreateSubScreen.New(self.uiCtrl.subCreate)
     --end
-    
 end
 
 return GameScreen

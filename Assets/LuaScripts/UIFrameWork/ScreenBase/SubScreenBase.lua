@@ -3,12 +3,20 @@
 --- Created by 54237.
 --- DateTime: 2020/5/30 13:11
 ---
-local SubScreenBase = class("SubScreenBase")
+local SubScreenBase = class("SubScreenBase",UIBase)
 
 function SubScreenBase:ctor(subCtrl,param)
     self.uiCtrl = subCtrl
     self.data = param
+    self:InitBtnListenerTabs()
+    self:BindAction()
     self:Init()
+end
+
+function SubScreenBase:Dispose()
+    self:UnBindListenerAction()
+    self:UnBindAction()
+    self:OnDispose()
 end
 
 -----------------子页面复写方法-----------------
@@ -16,5 +24,11 @@ function SubScreenBase:OnInit() end
 
 function SubScreenBase:OnDispose() end
 
+--公开复写接口，绑定事件
+function SubScreenBase:BindAction()
+end
+--公开复写接口,移除事件绑定
+function SubScreenBase:UnBindAction()
+end
 
 return SubScreenBase

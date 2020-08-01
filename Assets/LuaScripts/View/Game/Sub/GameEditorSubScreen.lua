@@ -15,8 +15,7 @@ function GameEditorSubScreen:Init()
 end
 
 function GameEditorSubScreen:BindAction()
-    self:AddOnClickListener(self.uiCtrl.btnContentArea,self.OnClickContentArea)
-    
+    self:AddOnClickListener(self.uiCtrl.btnContentArea,handler(self,self.OnClickContentArea))
 end
 
 function GameEditorSubScreen:InitEditorAgencyList(obj)
@@ -28,17 +27,29 @@ function GameEditorSubScreen:InitEditorAgencyList(obj)
 end
 
 function GameEditorSubScreen:ListItemRender(idx,item,AgencyID)
-    self:AddOnClickListener(item,handler(self,function ()
-        self:OnSelectedAgency(AgencyID)
+    local toggle = item:GetComponent(typeof(Toggle))
+    self:AddOnValueChangedListener(toggle,handler(self,function (value)
+        self:OnSelectedAgency(value,AgencyID)
     end))
 end
 
-function GameEditorSubScreen:OnSelectedAgency(AgencyID)
-    self.SelectAgencyID = AgencyID
+function GameEditorSubScreen:OnSelectedAgency(value,AgencyID)
+    if value then
+        self.SelectAgencyID = AgencyID
+    end
 end
 
 function GameEditorSubScreen:OnClickContentArea()
-    local sceneUnit = MapSceneManager:GetInstance():CreateSceneUnit(UnitClassTypeEnum.Ball,AgencyID,resPath,Vector3.zero,Quaternion.identity)
+    if not self.SelectAgencyID then
+        return
+    end
+    local AgencyCfg = GameConfig.AgencysByID[self.SelectAgencyID]
+    local touchPosOnScreen = Input.mousePosition;
+    touchPosOnScreen.z = 1
+    local touchPosInWorld = Camera.main:ScreenToWorldPoint(touchPosOnScreen);
+    if AgencyCfg then
+        local sceneUnit = MapSceneManager:GetInstance():CreateSceneUnit(UnitClassTypeEnum.Ball,self.SelectAgencyID,AgencyCfg.AgencyResUrl,touchPosInWorld,Quaternion.identity)
+    end
 end
 
 return GameEditorSubScreen
