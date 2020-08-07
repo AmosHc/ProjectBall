@@ -2,6 +2,8 @@
 : 适用于csharp, golang, lua例子
 tabtoy.exe ^
 --mode=v2 ^
+--csharp_out=..\Assets\ConfigData\Config.cs ^
+--binary_out=..\Assets\ConfigData\Config.bin ^
 --lua_out=..\Assets\LuaScripts\Constant\Config.lua ^
 --luaenumintvalue=true ^
 --combinename=Config ^
