@@ -12,15 +12,14 @@ public class MainCityScreen : ScreenBase
 {
     MainCityCtrl mCtrl;
 
-    public MainCityScreen(UIOpenScreenParameterBase param = null) : base(UIConst.UIMainCity,param)
+    public MainCityScreen(string uiRes, string UIName, UIOpenScreenParameterBase param = null) : base(uiRes, UIName, param)
     {
-        
     }
 
     protected override void OnLoadSuccess()
     {
         base.OnLoadSuccess();
-        mCtrl = _ctrlBase as MainCityCtrl;
+        mCtrl = _uiCtrl as MainCityCtrl;
 
         mCtrl.btnGuild.onClick.AddListener (OnGuildClick);
         mCtrl.btnTask.onClick.AddListener(OnTaskClick);
@@ -33,12 +32,12 @@ public class MainCityScreen : ScreenBase
     /// </summary>
     void OnGuildClick()
     {
-        GameUIManager.GetInstance().OpenUI(typeof(GuildScreen));
+//        GameUIManager.GetInstance().OpenUI(typeof(GuildScreen));
     }
 
     void OnTaskClick()
     {
-        GameUIManager.GetInstance().OpenUI(typeof(TaskScreen));
+//        GameUIManager.GetInstance().OpenUI(typeof(TaskScreen));
     }
 
     protected override void UIAdapt(int width, int height)

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using UnityEngine;
-using XLua;
+using UnityEngine.EventSystems;
 
 public class GameUIManager : MonoSingleton<GameUIManager>
 {
-    public GameObject uiRoot;
+    private const string UI_RES_PREFIX = "UGUI/";
+    private GameObject uiRoot;
+    public GameObject UiRoot => uiRoot;
     public GameObject poolRoot // 缓存节点
     {
         get;
@@ -24,6 +25,25 @@ public class GameUIManager : MonoSingleton<GameUIManager>
     // 处理最上层的界面逻辑
     List<ScreenBase> _sortTemp = new List<ScreenBase>();
 
+    protected override void Init()
+    {
+        // 初始化UI根节点
+        uiRoot = Instantiate(Resources.Load<GameObject>("UGUI/UIRoot"), transform);
+        uiCamera = uiRoot.GetComponent<Canvas>().worldCamera;
+        InitUIPool();
+    }
+
+    /// <summary>
+    /// 初始化UI缓存池
+    /// </summary>
+    protected void InitUIPool()
+    {
+        poolRoot = new GameObject("UIPoolRoot");
+        poolRoot.transform.SetParent(transform);
+        Canvas canvas = poolRoot.AddComponent<Canvas>();
+        canvas.enabled = false;
+    }
+
     // 预制分辨率
     static Vector2Int ScreenResolution = new Vector2Int(1136,640);
     void Update()
@@ -34,28 +54,15 @@ public class GameUIManager : MonoSingleton<GameUIManager>
             EventManager.ScreenResolutionEvt.BroadCastEvent(ScreenResolution.x,ScreenResolution.y);
         }
     }
-
-
-    protected override void Init()
-    {
-        // 初始化UI根节点
-        uiRoot = Instantiate(Resources.Load<GameObject>("UGUI/UIRoot"), transform);
-        uiCamera = uiRoot.GetComponent<Canvas>().worldCamera;
-
-        // 初始化UI缓存池
-        poolRoot = new GameObject("UIPoolRoot");
-        poolRoot.transform.SetParent(transform);
-
-        Canvas canvas = poolRoot.AddComponent<Canvas>();
-        canvas.enabled = false;
-    }
-
+    
     /// <summary>
     ///  UI打开入口没有判断条件直接打开
     /// </summary>
-	public ScreenBase OpenUI(Type type, UIOpenScreenParameterBase param = null)
+	public ScreenBase OpenUI(UIConfigItem uiCfg, UIOpenScreenParameterBase param = null)
     {
-        ScreenBase sb = GetUI(type);
+        if (uiCfg == null)
+            return null;
+        ScreenBase sb = GetUI(uiCfg.UiType);
         _uiOpenOrder++;
 
         // 如果已有界面,则不执行任何操作
@@ -65,22 +72,17 @@ public class GameUIManager : MonoSingleton<GameUIManager>
             {
                 sb.CtrlBase.ctrlCanvas.enabled = true;
             }
-            sb.OnShow();
-            // 处理最上层界面
-            if (sb.CtrlBase.mHideOtherScreenWhenThisOnTop)
-            {
-                ProcessUIOnTop();
-            }
-            // 处理货币栏变化
-            ChangeMoneyType();
 
-            return sb;
+            sb.SelfParam = param;
+            sb.Show();
         }
-        sb = (ScreenBase)Activator.CreateInstance(type, param);
-        sb.OnShow();
-
-        _typeScreens.Add(type, sb);
-        sb.SetOpenOrder(_uiOpenOrder); // 设置打开序号
+        else
+        {
+            sb = (ScreenBase) Activator.CreateInstance(uiCfg.UiType, UI_RES_PREFIX + uiCfg.UiResPath, uiCfg.UiName, param);//界面是唯一的，单例
+            //ui:Show() 同步放这没问题，异步的话这个会在Create之前，所以需要换个位置
+            _typeScreens.Add(uiCfg.UiType, sb);
+            sb.SetOpenOrder(_uiOpenOrder); // 设置打开序号
+        }
 
         // 处理最上层界面
         if (sb.CtrlBase.mHideOtherScreenWhenThisOnTop)
@@ -90,7 +92,7 @@ public class GameUIManager : MonoSingleton<GameUIManager>
 
         // 处理货币栏变化
         ChangeMoneyType();
-
+        
         return sb;
     }
 
@@ -134,7 +136,7 @@ public class GameUIManager : MonoSingleton<GameUIManager>
             if (type == typeof(ScreenBase))     // 标尺界面是测试界面 不用关闭
                 return false;
             else
-                sb.OnClose();
+                sb.Close();
             return true;
         }
         return false;
@@ -151,7 +153,7 @@ public class GameUIManager : MonoSingleton<GameUIManager>
                 continue;
             }
             if (_typeScreens.ContainsKey(k))
-                _typeScreens[k].OnClose();
+                _typeScreens[k].Close();
         }
     }
 
@@ -160,13 +162,13 @@ public class GameUIManager : MonoSingleton<GameUIManager>
     /// </summary>
     public void AddUI(ScreenBase sBase)
     {
-        sBase._panelRoot.transform.SetParent(GetUIRootTransform());
+        sBase.PanelRoot.transform.SetParent(GetUIRootTransform());
 
-        sBase._panelRoot.transform.localPosition = Vector3.zero;
-        sBase._panelRoot.transform.localScale = Vector3.one;
-        sBase._panelRoot.transform.localRotation = Quaternion.identity;
-        sBase._panelRoot.name = sBase._panelRoot.name.Replace("(Clone)", "");
-
+        sBase.PanelRoot.transform.localPosition = Vector3.zero;
+        sBase.PanelRoot.transform.localScale = Vector3.one;
+        sBase.PanelRoot.transform.localRotation = Quaternion.identity;
+        sBase.PanelRoot.name = sBase.PanelRoot.name.Replace("(Clone)", "");
+        sBase.Show();
         //// 处理最上层界面 如果是异步加载界面建议逻辑写在这里
         //if (sBase.CtrlBase.mHideOtherScreenWhenThisOnTop)
         //{
@@ -263,11 +265,11 @@ public class GameUIManager : MonoSingleton<GameUIManager>
         _sortTemp.Sort(
             (a, b) =>
             {
-                if (a._sortingLayer == b._sortingLayer)
+                if (a.SortingLayer == b.SortingLayer)
                 {
-                    return b._openOrder.CompareTo(a._openOrder);
+                    return b.OpenOrder.CompareTo(a.OpenOrder);
                 }
-                return b._sortingLayer.CompareTo(a._sortingLayer);
+                return b.SortingLayer.CompareTo(a.SortingLayer);
             });
     }
     
@@ -280,15 +282,37 @@ public class GameUIManager : MonoSingleton<GameUIManager>
 
 
     #region 通用API
-    //获取UIRoot节点
+    
+    /// <summary>
+    /// 获取UIRoot节点
+    /// </summary>
+    /// <returns></returns>
     public Transform GetUIRootTransform()
     {
         return transform;
     }
 
+    /// <summary>
+    /// 获取uicamera
+    /// </summary>
+    /// <returns></returns>
     public Camera GetUICamera()
     {
         return uiCamera;
+    }
+
+    /// <summary>
+    /// 是否点击在UI上
+    /// </summary>
+    /// <returns></returns>
+    public bool IsTouchUI()
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.pressPosition = Input.mousePosition;
+        eventData.position = Input.mousePosition;
+        List<RaycastResult> rayCastResult = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, rayCastResult);
+        return rayCastResult.Count > 0;
     }
     #endregion
 }

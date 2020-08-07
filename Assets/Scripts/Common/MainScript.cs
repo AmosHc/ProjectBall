@@ -22,5 +22,11 @@ public class MainScript : MonoBehaviour
     private void StartGame()
     {
         GameManager.GetInstance().ManagerCreate();
+        GameUIManager.GetInstance().OpenUI(UIConfig.Welcome);
+    }
+
+    private void Update()
+    {
+        //TODO
     }
 }

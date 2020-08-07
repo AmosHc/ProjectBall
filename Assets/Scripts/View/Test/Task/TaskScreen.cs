@@ -6,22 +6,21 @@ public class TaskScreen : ScreenBase
 {
     TaskCtrl mCtrl;
 
-    public TaskScreen(UIOpenScreenParameterBase param = null) : base(UIConst.UITask, param)
+    public TaskScreen(string uiRes, string UIName, UIOpenScreenParameterBase param = null) : base(uiRes, UIName, param)
     {
-        
     }
 
     protected override void OnLoadSuccess()
     {
         base.OnLoadSuccess();
-        mCtrl = _ctrlBase as TaskCtrl;
+        mCtrl = _uiCtrl as TaskCtrl;
 
         mCtrl.btnClose.onClick.AddListener (OnCloseClick);
     }
 
     void OnCloseClick()
     {
-        OnClose();
+        Close();
     }
 
 

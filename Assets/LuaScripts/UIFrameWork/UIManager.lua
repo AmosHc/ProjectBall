@@ -76,7 +76,7 @@ function UIManager:OpenUI(uiName,data)
         self.typeScreens[uiName] = ui
         ui:SetOpenOrder(self.uiOpenOrder) --设置打开序号
     end
-    --ui:Show() --同步放这没问题，异步的话这个会在Create之前，所以需要换个位置
+    
     if ui:GetCtrlBase().mHideOtherScreenWhenThisOnTop then
         self:ProcessUIOnTop();
     end

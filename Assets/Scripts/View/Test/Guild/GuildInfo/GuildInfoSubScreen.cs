@@ -21,12 +21,12 @@ public class GuildInfoSubScreen : SubScreenBase
 
     void OnCloseClick()
     {
-        GameUIManager.GetInstance().CloseUI(typeof(GuildScreen));
+//        GameUIManager.GetInstance().CloseUI(typeof(GuildScreen));
     }
 
     void OnOpenTaskClick()
     {
-        GameUIManager.GetInstance().OpenUI(typeof(TaskScreen));
+//        GameUIManager.GetInstance().OpenUI(typeof(TaskScreen));
     }
 
 }

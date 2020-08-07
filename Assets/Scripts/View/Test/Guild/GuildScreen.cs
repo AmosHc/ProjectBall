@@ -10,12 +10,14 @@ public class GuildScreen : ScreenBase
     GuildCreateSubScreen mSubCreate;// 创建公会界面逻辑
     GuildInfoSubScreen mSubInfo;        // 公会详情界面逻辑
 
-    public GuildScreen(UIOpenScreenParameterBase param = null) : base(UIConst.UIGuild){ }
+    public GuildScreen(string uiRes, string UIName, UIOpenScreenParameterBase param = null) : base(uiRes, UIName, param)
+    {
+    }
 
     protected override void OnLoadSuccess()
     {
         base.OnLoadSuccess();
-        mCtrl = _ctrlBase as GuildCtrl;
+        mCtrl = _uiCtrl as GuildCtrl;
 
         // 监听公会创建成功事件
         mCtrl.AutoRelease(EventManager.OnGuildCreated.Subscribe(OnGuildCreated));

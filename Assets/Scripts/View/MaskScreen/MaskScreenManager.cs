@@ -38,7 +38,7 @@ public class MaskScreenManager
     {
         // 以防界面当帧打开后又立即关闭,导致screen为null报错
         if (screen == null || screen.CtrlBase == null) return;
-        var go = Object.Instantiate(goAutoMask, screen._panelRoot.transform);
+        var go = Object.Instantiate(goAutoMask, screen.PanelRoot.transform);
         go.transform.SetAsFirstSibling();
         go.name = "UIAutoMask_Created by Mask ScreenManager";
         Button btnMask = go.GetComponent<Button>();

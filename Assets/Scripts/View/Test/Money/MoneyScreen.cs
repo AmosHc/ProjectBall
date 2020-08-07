@@ -6,15 +6,14 @@ public class MoneyScreen : ScreenBase
 {
     MoneyCtrl mCtrl;
 
-    public MoneyScreen(UIOpenScreenParameterBase param = null) : base(UIConst.UIMoney, param)
+    public MoneyScreen(string uiRes, string UIName, UIOpenScreenParameterBase param = null) : base(uiRes, UIName, param)
     {
-        
     }
 
     protected override void OnLoadSuccess()
     {
         base.OnLoadSuccess();
-        mCtrl = _ctrlBase as MoneyCtrl;
+        mCtrl = _uiCtrl as MoneyCtrl;
 
         // 监听货币栏变化事件
         mCtrl.AutoRelease(EventManager.OnMoneyTypeChange.Subscribe(OnMoneyTypeChange));
