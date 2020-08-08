@@ -1,4 +1,5 @@
-﻿using UIFramework.ScreenBase;
+﻿using System.Collections.Generic;
+using UIFramework.ScreenBase;
 using UnityEngine;
 
 public class ScreenBase : UIBase
@@ -8,6 +9,8 @@ public class ScreenBase : UIBase
     private string _uiRes = "";
     private int _openOrder = 0;// 界面打开顺序
     private int _sortingLayer = 0;// 界面层级
+
+    private List<SubScreenBase> _allSubScreens;
     
     protected UICtrlBase _uiCtrl;
     
@@ -21,6 +24,7 @@ public class ScreenBase : UIBase
         _uiRes = uiRes;
         _uiName = UIName;
         _selfParam = param;
+        _allSubScreens = new List<SubScreenBase>();
         
         InitBtnListenerTabs();
         StartLoad();
@@ -111,9 +115,36 @@ public class ScreenBase : UIBase
             _uiCtrl.ctrlCanvas.sortingOrder = openOrder;
         }
     }
+    
+    protected void RegisterSubScreen(SubScreenBase subScreenInst)
+    {
+        if (_allSubScreens == null)
+        {
+            Debug.LogError("ScreenBase已被释放，不可添加subScreenInst");
+        }
 
+        if (subScreenInst != null)
+        {
+            if(!_allSubScreens.Contains(subScreenInst))
+                _allSubScreens.Add(subScreenInst);
+        }
+    }
+
+    public void DisposeSunScreens()
+    {
+        if (_allSubScreens == null) 
+            return;
+        foreach (SubScreenBase inst in _allSubScreens)
+        {
+            inst.Dispose();
+        }
+
+        _allSubScreens = null;
+    }
+    
     public void Dispose()
     {
+        DisposeSunScreens();
         OnDispose();
         GameObject.Destroy(_panelRoot);
     }

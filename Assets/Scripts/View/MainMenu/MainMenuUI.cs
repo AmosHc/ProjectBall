@@ -19,7 +19,7 @@ namespace ProjectBall.View
 
         private void OnOpenThemeChooserClick()
         {
-//            UIMgr:OpenUI("ThemeChooserUI")
+            GameUIManager.GetInstance().OpenUI(UIConfig.ThemeChooser);
         }
 
         private void OnOpenSettingClick()

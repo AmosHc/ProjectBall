@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class GameUIManager : MonoSingleton<GameUIManager>
 {
-    private const string UI_RES_PREFIX = "UGUI/";
+    public const string UI_RES_PREFIX = "UGUI/";
     private GameObject uiRoot;
     public GameObject UiRoot => uiRoot;
     public GameObject poolRoot // 缓存节点

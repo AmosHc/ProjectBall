@@ -3,14 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EUnitClassType
-{
-    Ball = 1,//玩家
-    StaticAgency = 2,//静态机关
-    DynamicAgency = 3,//动态机关
-    Star = 4,//星
-}
-
 public class MapSceneManager : MonoSingleton<MapSceneManager>
 {
     public SceneUnit CreateSceneUnit(int inType, int baseID, string resPath, Vector3 position, Quaternion rotation,float size = 1)

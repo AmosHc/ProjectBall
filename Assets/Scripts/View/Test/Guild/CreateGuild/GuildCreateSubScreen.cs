@@ -7,13 +7,10 @@ public class GuildCreateSubScreen : SubScreenBase
 {
     GuildCreateSubCtrl mCtrl;// 创建公会子控件
 
-    public GuildCreateSubScreen(GuildCreateSubCtrl subCtrl) :base(subCtrl)
-    {
-    }
 
-    protected override void Init()
+    protected override void OnInit()
     {
-        mCtrl = mCtrlBase as GuildCreateSubCtrl;
+        mCtrl = _uictrl as GuildCreateSubCtrl;
 
         mCtrl.btnCreate.onClick.AddListener(OnCreateClick);
         mCtrl.btnClose.onClick.AddListener(OnCloseClick);
@@ -27,5 +24,9 @@ public class GuildCreateSubScreen : SubScreenBase
     void OnCloseClick()
     {
         GameUIManager.GetInstance().CloseUI(typeof(GuildScreen));
+    }
+
+    public GuildCreateSubScreen(UISubCtrlBase ctrlBase, UIOpenScreenParameterBase param = null) : base(ctrlBase, param)
+    {
     }
 }

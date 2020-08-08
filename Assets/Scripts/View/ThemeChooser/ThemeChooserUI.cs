@@ -5,6 +5,24 @@ using Utility;
 
 namespace ProjectBall.View
 {
+    public class ThemechooserParam : UIOpenScreenParameterBase
+    {
+        private string _titleName;
+        private List<int> _levels;
+
+        public string TitleName
+        {
+            get => _titleName;
+            set => _titleName = value;
+        }
+
+        public List<int> Levels
+        {
+            get => _levels;
+            set => _levels = value;
+        }
+    }
+    
     public class ThemeChooserUI : ScreenBase
     {
         private int _idx = 0;
@@ -16,11 +34,11 @@ namespace ProjectBall.View
         
         public ThemeChooserUI(string uiRes, string UIName, UIOpenScreenParameterBase param = null) : base(uiRes, UIName, param)
         {
-            _selfCtrl = _uiCtrl as ThemeChooserCtrl;
         }
 
         public override void OnCreate()
         {
+            _selfCtrl = _uiCtrl as ThemeChooserCtrl;
             _ThemeChooserCfgs = GameConfigManager.GetInstance().GameConfig.ThemeChooser;
         }
 
@@ -34,7 +52,7 @@ namespace ProjectBall.View
 
         public void RefreshPage()
         {
-            int idx = _idx + 1;
+            int idx = _idx;
             var cfg = _ThemeChooserCfgs[idx];
             //_selfCtrl.icon.url = self.ThemeChooserCfg[_Idx].icon
             _selfCtrl.title.text = cfg.ThemeName;
@@ -48,6 +66,7 @@ namespace ProjectBall.View
             AddOnClickListener(_selfCtrl.btnPrev, OnPreviousPageClick);
             AddOnClickListener(_selfCtrl.btnNext, OnNextPageClick);
             AddOnClickListener(_selfCtrl.btnJumpTheme, OnOpenJumpTheme);
+            AddOnClickListener(_selfCtrl.btnClose,Close);
         }
 
         private void OnPreviousPageClick()
@@ -64,7 +83,10 @@ namespace ProjectBall.View
 
         private void OnOpenJumpTheme()
         {
-            
+            ThemechooserParam param = new ThemechooserParam();
+            param.TitleName = _selfCtrl.title.text;
+            param.Levels = _levels;
+            GameUIManager.GetInstance().OpenUI(UIConfig.SelectLevelUI,param);
         }
     }
 }

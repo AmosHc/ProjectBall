@@ -42,5 +42,8 @@ public class UIConfig
 //    public const string UITask = "Task"; // 任务
 //    public const string UIMoney = "Money"; // 货币
     public static UIConfigItem Welcome = new UIConfigItem("Welcome","WelcomeUI",typeof(WelcomeUI)); //欢迎页
-    public static UIConfigItem MainMenu = new UIConfigItem("MainMenu","MainMenuUI",typeof(MainMenuUI)); //欢迎页
+    public static UIConfigItem MainMenu = new UIConfigItem("MainMenu","MainMenuUI",typeof(MainMenuUI)); //主菜单
+    public static UIConfigItem ThemeChooser = new UIConfigItem("ThemeChooser","ThemeChooserUI",typeof(ThemeChooserUI)); //一级选关
+    public static UIConfigItem SelectLevelUI = new UIConfigItem("SelectLevel/SelectLevel","SelectLevelUI",typeof(SelectLevelUI)); //二级选关
+    public static UIConfigItem GameUI = new UIConfigItem("Game/Game","GameUI",typeof(GameUI)); //游戏
 }

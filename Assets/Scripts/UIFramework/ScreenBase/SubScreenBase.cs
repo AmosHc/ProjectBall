@@ -1,21 +1,53 @@
-﻿public class SubScreenBase
+﻿using UIFramework.ScreenBase;
+
+public class SubScreenBase : UIBase
 {
-    protected UISubCtrlBase mCtrlBase;
+    protected UISubCtrlBase _uictrl;
+    protected UIOpenScreenParameterBase _selfParam;
 
-    public UISubCtrlBase CtrlBase { get { return mCtrlBase; } }
+    public UISubCtrlBase CtrlBase { get { return _uictrl; } }
 
-    public SubScreenBase(UISubCtrlBase ctrlBase)
+    public SubScreenBase(UISubCtrlBase ctrlBase,UIOpenScreenParameterBase param = null)
     {
-        mCtrlBase = ctrlBase;
-        Init();
+        _uictrl = ctrlBase;
+        _selfParam = param;
+        InitBtnListenerTabs();
+        OnInit();
+        BindAction();
+        OnShow();
     }
 
-    virtual protected void Init()
+    public void Dispose()
+    {
+        UnBindListenerAction();
+        UnBindAction();
+        OnDispose();
+    }
+    
+    /// <summary>
+    /// -----------------子页面复写方法-----------------
+    /// </summary>
+    protected virtual void OnInit()
     {
 
     }
 
-    virtual public void Dispose()
+    protected virtual void BindAction()
+    {
+
+    }
+
+    protected virtual void OnShow()
+    {
+        
+    }
+    
+    protected virtual void UnBindAction()
+    {
+
+    }
+    
+    protected virtual void OnDispose()
     {
 
     }

@@ -65,22 +65,6 @@ namespace table
 
             return def;
         }
-		Dictionary<int, LevelsDefine> _LevelsByownerIndex = new Dictionary<int, LevelsDefine>();
-        public LevelsDefine GetLevelsByownerIndex(int ownerIndex, LevelsDefine def = default(LevelsDefine))
-        {
-            LevelsDefine ret;
-            if ( _LevelsByownerIndex.TryGetValue( ownerIndex, out ret ) )
-            {
-                return ret;
-            }
-			
-			if ( def == default(LevelsDefine) )
-			{
-				TableLogger.ErrorLine("GetLevelsByownerIndex failed, ownerIndex: {0}", ownerIndex);
-			}
-
-            return def;
-        }
 		Dictionary<int, AgencysDefine> _AgencysByID = new Dictionary<int, AgencysDefine>();
         public AgencysDefine GetAgencysByID(int ID, AgencysDefine def = default(AgencysDefine))
         {
@@ -99,7 +83,7 @@ namespace table
         }
 		
 		public string GetBuildID(){
-			return "87728e7080c51642a14f8c6062d75a87";
+			return "1c3c4a375873291c220729746d515777";
 		}
 	
 		#endregion
@@ -160,8 +144,6 @@ namespace table
 				var element = ins.Levels[i];
 				
 				ins._LevelsByLevelID.Add(element.LevelID, element);
-				
-				ins._LevelsByownerIndex.Add(element.ownerIndex, element);
 				
 			}
 			
@@ -430,7 +412,6 @@ namespace table
 			
 				_ThemeChooserByindex.Clear(); 
 				_LevelsByLevelID.Clear(); 
-				_LevelsByownerIndex.Clear(); 
 				_AgencysByID.Clear(); 
 		}
 		#endregion

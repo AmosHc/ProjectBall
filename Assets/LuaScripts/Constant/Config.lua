@@ -47,12 +47,6 @@ for _, rec in pairs(tab.Levels) do
 	tab.LevelsByLevelID[rec.LevelID] = rec
 end
 
--- ownerIndex
-tab.LevelsByownerIndex = {}
-for _, rec in pairs(tab.Levels) do
-	tab.LevelsByownerIndex[rec.ownerIndex] = rec
-end
-
 -- ID
 tab.AgencysByID = {}
 for _, rec in pairs(tab.Agencys) do

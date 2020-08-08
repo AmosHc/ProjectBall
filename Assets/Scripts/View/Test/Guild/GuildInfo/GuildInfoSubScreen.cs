@@ -7,14 +7,10 @@ public class GuildInfoSubScreen : SubScreenBase
 {
     GuildInfoSubCtrl mCtrl;// 创建公会子控件
 
-    public GuildInfoSubScreen(GuildInfoSubCtrl subCtrl) :base(subCtrl)
-    {
-        
-    }
 
-    protected override void Init()
+    protected override void OnInit()
     {
-        mCtrl = mCtrlBase as GuildInfoSubCtrl;
+        mCtrl = _uictrl as GuildInfoSubCtrl;
         mCtrl.btnClose.onClick.AddListener(OnCloseClick);
         mCtrl.btnJumpTask.onClick.AddListener(OnOpenTaskClick);
     }
@@ -29,4 +25,7 @@ public class GuildInfoSubScreen : SubScreenBase
 //        GameUIManager.GetInstance().OpenUI(typeof(TaskScreen));
     }
 
+    public GuildInfoSubScreen(UISubCtrlBase ctrlBase, UIOpenScreenParameterBase param = null) : base(ctrlBase, param)
+    {
+    }
 }
