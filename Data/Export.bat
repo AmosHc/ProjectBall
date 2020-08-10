@@ -9,6 +9,7 @@ tabtoy.exe ^
 --combinename=Config ^
 --lan=zh_cn ^
 ./Excels/Globals.xlsx ^
+./Excels/EntityTemplate.xlsx ^
 ./Excels/ThemeChooser.xlsx ^
 ./Excels/Levels.xlsx ^
 ./Excels/Agencys.xlsx

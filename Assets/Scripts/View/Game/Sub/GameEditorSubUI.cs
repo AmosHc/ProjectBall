@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 using Utility;
 
@@ -21,6 +22,7 @@ namespace ProjectBall.View
         protected override void BindAction()
         {
             AddOnClickListener(_ctrl.btnContentArea,OnClickContentArea);
+            AddOnClickListener(_ctrl.btnRun,OnClickStartGame);
         }
 
         protected override void OnShow()
@@ -59,14 +61,18 @@ namespace ProjectBall.View
                 return;
             var agencyCfg = GameConfigManager.GetInstance().GameConfig.GetAgencysByID(_selectAgencyID);
             Vector3 touchPosOnScreen = Input.mousePosition;
-            touchPosOnScreen.z = 1;
             var touchPosInWorld = Camera.main.ScreenToWorldPoint(touchPosOnScreen);
+            touchPosInWorld.z = 0;
             if (agencyCfg != null)
             {
-                var agencySceneUnit = MapSceneManager.GetInstance().CreateSceneUnit(EUnitClassType.Ball, _selectAgencyID,
-                    agencyCfg.AgencyResUrl, touchPosInWorld, Quaternion.identity);
+                EntityManager.GetInstance().CreateEntity<Agency>(agencyCfg.EntityId, touchPosInWorld, Quaternion.identity);
             }
         }
-        
+
+        private void OnClickStartGame()
+        {
+            var levelCfg = ((OpenGameUIParam) _selfParam).LevelsDefine;
+            EntityManager.GetInstance().CreateEntity<Ball>(Const.PlayBallID, new Vector3(levelCfg.SpawnPoint.X,levelCfg.SpawnPoint.Y), Quaternion.identity);
+        }
     }
 }

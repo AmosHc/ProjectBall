@@ -11,5 +11,6 @@ public class GameManager : MonoSingleton<GameManager>
         GameConfigManager.GetInstance().Create();
         SceneUnitPoolManager.GetInstance().Create();
         GameUIManager.GetInstance().Create();
+        EntityManager.GetInstance().Create();
     }
 }

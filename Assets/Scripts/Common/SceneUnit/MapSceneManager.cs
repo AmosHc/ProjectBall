@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using table;
 using UnityEngine;
 
 public class MapSceneManager : MonoSingleton<MapSceneManager>
@@ -19,13 +20,10 @@ public class MapSceneManager : MonoSingleton<MapSceneManager>
             case EUnitClassType.Ball:
                 sceneUnit = CreateSceneBall(baseID,resPath,position,rotation);
                 break;
-            case EUnitClassType.StaticAgency:
-                sceneUnit = CreateSceneStaticAgency(baseID,resPath,position,rotation);
+            case EUnitClassType.Agency:
+                sceneUnit = CreateSceneAgency(baseID,resPath,position,rotation);
                 break;
-            case EUnitClassType.DynamicAgency:
-                sceneUnit = CreateSceneDynamicAgency(baseID,resPath,position,rotation);
-                break;
-            case EUnitClassType.Star:
+            case EUnitClassType.GameItem:
                 sceneUnit = CreateSceneStar(baseID,resPath,position,rotation);
                 break;
         }
@@ -52,27 +50,14 @@ public class MapSceneManager : MonoSingleton<MapSceneManager>
         return u;
     }
     
-    private SceneUnit CreateSceneStaticAgency(int uniID, string resPath, Vector3 position, Quaternion rotation)
+    private SceneUnit CreateSceneAgency(int uniID, string resPath, Vector3 position, Quaternion rotation)
     {
         SceneUnit u = SceneUnitPoolManager.GetInstance().Spawn();
 
-        u.gameObject.name = "Fighter";
+        u.gameObject.name = "Agency";
         u.transform.position = position;
         u.transform.rotation = rotation;
-        u.gameObject.layer = LayerMask.NameToLayer("Unit");
-        u.Init(uniID);
-        return u;
-    }
-    
-    private SceneUnit CreateSceneDynamicAgency(int uniID, string resPath, Vector3 position, Quaternion rotation)
-    {
-        SceneUnit u = SceneUnitPoolManager.GetInstance().Spawn();
-
-        u.gameObject.name = "Player";
-        u.transform.position = position;
-        u.transform.rotation = rotation;
-        u.gameObject.layer = LayerMask.NameToLayer("Player");
-        u.IsPlayer = true;
+        u.gameObject.layer = LayerMask.NameToLayer("Agency");
         u.Init(uniID);
         return u;
     }

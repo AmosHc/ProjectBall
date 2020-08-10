@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6397044926720914654}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -619905303, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FirstSelected: {fileID: 0}
@@ -56,7 +56,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6397044926720914654}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1077351063, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_HorizontalAxis: Horizontal
@@ -137,7 +137,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6397044927448064338}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 0
@@ -159,7 +159,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6397044927448064338}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreReversedGraphics: 1
@@ -192,7 +192,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6397044927585504355}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -552.7783, y: -250.42297, z: 91.20513}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6397044927448064342}
@@ -210,9 +210,10 @@ Camera:
   m_ClearFlags: 3
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_GateFitMode: 2
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
@@ -225,7 +226,7 @@ Camera:
   field of view: 60
   orthographic: 1
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: 1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 32
@@ -251,6 +252,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TestTopMaskScreen
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119146808300049570, guid: e8a5c523cfdd95644bc9e637187e29fc,
+        type: 3}
+      propertyPath: m_OverridePixelPerfect
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8119146808300147320, guid: e8a5c523cfdd95644bc9e637187e29fc,
         type: 3}
@@ -371,11 +377,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 64
-      objectReference: {fileID: 0}
-    - target: {fileID: 8119146808300049570, guid: e8a5c523cfdd95644bc9e637187e29fc,
-        type: 3}
-      propertyPath: m_OverridePixelPerfect
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6799077725738179013, guid: e8a5c523cfdd95644bc9e637187e29fc, type: 3}

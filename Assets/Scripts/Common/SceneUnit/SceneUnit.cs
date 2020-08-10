@@ -10,22 +10,43 @@ public enum EComponentType
 
 public class SceneUnit : PoolItemBase
 {
-    private Transform _transform;
     private CapsuleCollider _collider;
     private Rigidbody _rigidbody;
     private AudioSource _audioSource;
     private GameObject _root;
-    
+    private Transform _thisTrans;
     private int _Id;
-    
     private bool _isPlayer;
     private bool _isStatic;
     private bool _isTrigger = false;
 
+    public Transform ThisTrans
+    {
+        get => _thisTrans;
+        set => _thisTrans = value;
+    }
+
+    public GameObject Root
+    {
+        get => _root;
+        set => _root = value;
+    }
+
+    public AudioSource AudioSource
+    {
+        get => _audioSource;
+        set => _audioSource = value;
+    }
+
     public virtual void Init(int uniID)
     {
-        _transform = transform;
         _Id = uniID;
+        
+    }
+
+    public void UnInit()
+    {
+        SceneUnitPoolManager.GetInstance().Despawn(this);
     }
 
     public int Id
@@ -43,8 +64,8 @@ public class SceneUnit : PoolItemBase
         root.transform.localScale = Vector3.one;
         root.transform.position = Vector3.zero;
         root.transform.rotation = Quaternion.identity;
-
-        _transform = root.transform;
+        
+        ThisTrans = root.transform;
         _root = root;
     }
 

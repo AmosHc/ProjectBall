@@ -6,6 +6,21 @@ using System.Collections.Generic;
 namespace table
 {
 	
+	// Defined in table: EntityTemplate
+	public enum EUnitClassType
+	{
+		
+		
+		Ball = 0, // 球
+		
+		
+		Agency = 1, // 机关
+		
+		
+		GameItem = 2, // 场景物件
+	
+	}
+	
 	
 
 	// Defined in table: Config
@@ -15,6 +30,11 @@ namespace table
 	
 		public tabtoy.Logger TableLogger = new tabtoy.Logger();
 	
+		
+		/// <summary> 
+		/// EntityTemplate
+		/// </summary>
+		public List<EntityTemplateDefine> EntityTemplate = new List<EntityTemplateDefine>(); 
 		
 		/// <summary> 
 		/// ThemeChooser
@@ -33,7 +53,23 @@ namespace table
 	
 	
 		#region Index code
-	 	Dictionary<int, ThemeChooserDefine> _ThemeChooserByindex = new Dictionary<int, ThemeChooserDefine>();
+	 	Dictionary<int, EntityTemplateDefine> _EntityTemplateByEntityId = new Dictionary<int, EntityTemplateDefine>();
+        public EntityTemplateDefine GetEntityTemplateByEntityId(int EntityId, EntityTemplateDefine def = default(EntityTemplateDefine))
+        {
+            EntityTemplateDefine ret;
+            if ( _EntityTemplateByEntityId.TryGetValue( EntityId, out ret ) )
+            {
+                return ret;
+            }
+			
+			if ( def == default(EntityTemplateDefine) )
+			{
+				TableLogger.ErrorLine("GetEntityTemplateByEntityId failed, EntityId: {0}", EntityId);
+			}
+
+            return def;
+        }
+		Dictionary<int, ThemeChooserDefine> _ThemeChooserByindex = new Dictionary<int, ThemeChooserDefine>();
         public ThemeChooserDefine GetThemeChooserByindex(int index, ThemeChooserDefine def = default(ThemeChooserDefine))
         {
             ThemeChooserDefine ret;
@@ -83,7 +119,7 @@ namespace table
         }
 		
 		public string GetBuildID(){
-			return "1c3c4a375873291c220729746d515777";
+			return "a81cbe1ac74fef8f796b6746460f3be9";
 		}
 	
 		#endregion
@@ -112,15 +148,20 @@ namespace table
                 { 
                 	case 0xa0000:
                 	{
-						ins.ThemeChooser.Add( reader.ReadStruct<ThemeChooserDefine>(ThemeChooserDefineDeserializeHandler) );
+						ins.EntityTemplate.Add( reader.ReadStruct<EntityTemplateDefine>(EntityTemplateDefineDeserializeHandler) );
                 	}
                 	break; 
                 	case 0xa0001:
                 	{
-						ins.Levels.Add( reader.ReadStruct<LevelsDefine>(LevelsDefineDeserializeHandler) );
+						ins.ThemeChooser.Add( reader.ReadStruct<ThemeChooserDefine>(ThemeChooserDefineDeserializeHandler) );
                 	}
                 	break; 
                 	case 0xa0002:
+                	{
+						ins.Levels.Add( reader.ReadStruct<LevelsDefine>(LevelsDefineDeserializeHandler) );
+                	}
+                	break; 
+                	case 0xa0003:
                 	{
 						ins.Agencys.Add( reader.ReadStruct<AgencysDefine>(AgencysDefineDeserializeHandler) );
                 	}
@@ -128,6 +169,15 @@ namespace table
                 }
              } 
 
+			
+			// Build EntityTemplate Index
+			for( int i = 0;i< ins.EntityTemplate.Count;i++)
+			{
+				var element = ins.EntityTemplate[i];
+				
+				ins._EntityTemplateByEntityId.Add(element.EntityId, element);
+				
+			}
 			
 			// Build ThemeChooser Index
 			for( int i = 0;i< ins.ThemeChooser.Count;i++)
@@ -227,6 +277,52 @@ namespace table
                 	case 0x50002:
                 	{
 						ins.Z = reader.ReadFloat();
+                	}
+                	break; 
+                }
+             } 
+
+			
+		}
+		static tabtoy.DeserializeHandler<EntityTemplateDefine> _EntityTemplateDefineDeserializeHandler;
+		static tabtoy.DeserializeHandler<EntityTemplateDefine> EntityTemplateDefineDeserializeHandler
+		{
+			get
+			{
+				if (_EntityTemplateDefineDeserializeHandler == null )
+				{
+					_EntityTemplateDefineDeserializeHandler = new tabtoy.DeserializeHandler<EntityTemplateDefine>(Deserialize);
+				}
+
+				return _EntityTemplateDefineDeserializeHandler;
+			}
+		}
+		public static void Deserialize( EntityTemplateDefine ins, tabtoy.DataReader reader )
+		{
+			
+ 			int tag = -1;
+            while ( -1 != (tag = reader.ReadTag()))
+            {
+                switch (tag)
+                { 
+                	case 0x10000:
+                	{
+						ins.EntityId = reader.ReadInt32();
+                	}
+                	break; 
+                	case 0x60001:
+                	{
+						ins.EntityName = reader.ReadString();
+                	}
+                	break; 
+                	case 0x60002:
+                	{
+						ins.ResPath = reader.ReadString();
+                	}
+                	break; 
+                	case 0x80003:
+                	{
+						ins.EntityType = reader.ReadEnum<EUnitClassType>();
                 	}
                 	break; 
                 }
@@ -382,9 +478,9 @@ namespace table
 						ins.AgencyName = reader.ReadString();
                 	}
                 	break; 
-                	case 0x60002:
+                	case 0x10002:
                 	{
-						ins.AgencyResUrl = reader.ReadString();
+						ins.EntityId = reader.ReadInt32();
                 	}
                 	break; 
                 	case 0x90003:
@@ -406,10 +502,12 @@ namespace table
 		#region Clear Code
 		public void Clear( )
 		{			
+				EntityTemplate.Clear(); 		
 				ThemeChooser.Clear(); 		
 				Levels.Clear(); 		
 				Agencys.Clear(); 
 			
+				_EntityTemplateByEntityId.Clear(); 
 				_ThemeChooserByindex.Clear(); 
 				_LevelsByLevelID.Clear(); 
 				_AgencysByID.Clear(); 
@@ -449,6 +547,36 @@ namespace table
 		
 		
 		public float Z = 0f; 
+	
+	
+
+	} 
+
+	// Defined in table: EntityTemplate
+	
+	public partial class EntityTemplateDefine
+	{
+	
+		
+		/// <summary> 
+		/// 实体ID
+		/// </summary>
+		public int EntityId = 0; 
+		
+		/// <summary> 
+		/// 实体名称
+		/// </summary>
+		public string EntityName = ""; 
+		
+		/// <summary> 
+		/// prefab路径
+		/// </summary>
+		public string ResPath = ""; 
+		
+		/// <summary> 
+		/// entity类型
+		/// </summary>
+		public EUnitClassType EntityType = EUnitClassType.Ball; 
 	
 	
 
@@ -554,9 +682,9 @@ namespace table
 		public string AgencyName = ""; 
 		
 		/// <summary> 
-		/// 图标路径
+		/// 关联的实体Id
 		/// </summary>
-		public string AgencyResUrl = ""; 
+		public int EntityId = 0; 
 		
 		/// <summary> 
 		/// 最大缩放参数

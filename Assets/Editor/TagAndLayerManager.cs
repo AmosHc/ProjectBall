@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
 using System;
+using table;
 
 #if UNITY_EDITOR
 public class TagAndLayerManager 
