@@ -30,9 +30,8 @@ public class EntityManager : MonoSingleton<EntityManager>
         T entity = CommonUtility.GetOrAddComponent<T>(unit.gameObject);
         if (entity != null)
         {
-            entity.Init(unit);
+            entity.Init(unit,config);
             AddEntity(entityID, entity);
-            CreateEntityModel(config.ResPath,entity);
         }
         return entity;
     }
@@ -54,16 +53,5 @@ public class EntityManager : MonoSingleton<EntityManager>
     public List<Entity> GetEntitys(int entityID)
     {
         return entities[entityID];
-    }
-
-    private void CreateEntityModel(string resPath,Entity entity)
-    {
-        if (string.IsNullOrEmpty(resPath))
-            return;
-        ResourcesMgr.GetInstance().LoadAsset(resPath,(obj =>
-        {
-            GameObject inst = Instantiate(obj, entity.Unit.ThisTrans);
-            inst.transform.localPosition = Vector3.zero;
-        }));
     }
 }

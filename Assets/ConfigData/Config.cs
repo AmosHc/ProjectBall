@@ -42,6 +42,11 @@ namespace table
 		public List<ThemeChooserDefine> ThemeChooser = new List<ThemeChooserDefine>(); 
 		
 		/// <summary> 
+		/// Balls
+		/// </summary>
+		public List<BallsDefine> Balls = new List<BallsDefine>(); 
+		
+		/// <summary> 
 		/// Levels
 		/// </summary>
 		public List<LevelsDefine> Levels = new List<LevelsDefine>(); 
@@ -85,6 +90,22 @@ namespace table
 
             return def;
         }
+		Dictionary<int, BallsDefine> _BallsByEntityId = new Dictionary<int, BallsDefine>();
+        public BallsDefine GetBallsByEntityId(int EntityId, BallsDefine def = default(BallsDefine))
+        {
+            BallsDefine ret;
+            if ( _BallsByEntityId.TryGetValue( EntityId, out ret ) )
+            {
+                return ret;
+            }
+			
+			if ( def == default(BallsDefine) )
+			{
+				TableLogger.ErrorLine("GetBallsByEntityId failed, EntityId: {0}", EntityId);
+			}
+
+            return def;
+        }
 		Dictionary<int, LevelsDefine> _LevelsByLevelID = new Dictionary<int, LevelsDefine>();
         public LevelsDefine GetLevelsByLevelID(int LevelID, LevelsDefine def = default(LevelsDefine))
         {
@@ -119,7 +140,7 @@ namespace table
         }
 		
 		public string GetBuildID(){
-			return "a81cbe1ac74fef8f796b6746460f3be9";
+			return "0fe5bf6021a2f59afb37c95acdc4c246";
 		}
 	
 		#endregion
@@ -158,10 +179,15 @@ namespace table
                 	break; 
                 	case 0xa0002:
                 	{
-						ins.Levels.Add( reader.ReadStruct<LevelsDefine>(LevelsDefineDeserializeHandler) );
+						ins.Balls.Add( reader.ReadStruct<BallsDefine>(BallsDefineDeserializeHandler) );
                 	}
                 	break; 
                 	case 0xa0003:
+                	{
+						ins.Levels.Add( reader.ReadStruct<LevelsDefine>(LevelsDefineDeserializeHandler) );
+                	}
+                	break; 
+                	case 0xa0004:
                 	{
 						ins.Agencys.Add( reader.ReadStruct<AgencysDefine>(AgencysDefineDeserializeHandler) );
                 	}
@@ -185,6 +211,15 @@ namespace table
 				var element = ins.ThemeChooser[i];
 				
 				ins._ThemeChooserByindex.Add(element.index, element);
+				
+			}
+			
+			// Build Balls Index
+			for( int i = 0;i< ins.Balls.Count;i++)
+			{
+				var element = ins.Balls[i];
+				
+				ins._BallsByEntityId.Add(element.EntityId, element);
 				
 			}
 			
@@ -376,6 +411,52 @@ namespace table
 
 			
 		}
+		static tabtoy.DeserializeHandler<BallsDefine> _BallsDefineDeserializeHandler;
+		static tabtoy.DeserializeHandler<BallsDefine> BallsDefineDeserializeHandler
+		{
+			get
+			{
+				if (_BallsDefineDeserializeHandler == null )
+				{
+					_BallsDefineDeserializeHandler = new tabtoy.DeserializeHandler<BallsDefine>(Deserialize);
+				}
+
+				return _BallsDefineDeserializeHandler;
+			}
+		}
+		public static void Deserialize( BallsDefine ins, tabtoy.DataReader reader )
+		{
+			
+ 			int tag = -1;
+            while ( -1 != (tag = reader.ReadTag()))
+            {
+                switch (tag)
+                { 
+                	case 0x10000:
+                	{
+						ins.EntityId = reader.ReadInt32();
+                	}
+                	break; 
+                	case 0x60001:
+                	{
+						ins.BallName = reader.ReadString();
+                	}
+                	break; 
+                	case 0x50002:
+                	{
+						ins.ColliderRadius = reader.ReadFloat();
+                	}
+                	break; 
+                	case 0x60003:
+                	{
+						ins.MaterialResPath = reader.ReadString();
+                	}
+                	break; 
+                }
+             } 
+
+			
+		}
 		static tabtoy.DeserializeHandler<LevelsDefine> _LevelsDefineDeserializeHandler;
 		static tabtoy.DeserializeHandler<LevelsDefine> LevelsDefineDeserializeHandler
 		{
@@ -504,11 +585,13 @@ namespace table
 		{			
 				EntityTemplate.Clear(); 		
 				ThemeChooser.Clear(); 		
+				Balls.Clear(); 		
 				Levels.Clear(); 		
 				Agencys.Clear(); 
 			
 				_EntityTemplateByEntityId.Clear(); 
 				_ThemeChooserByindex.Clear(); 
+				_BallsByEntityId.Clear(); 
 				_LevelsByLevelID.Clear(); 
 				_AgencysByID.Clear(); 
 		}
@@ -607,6 +690,36 @@ namespace table
 		/// 主题所包含的关卡ID
 		/// </summary>
 		public List<int> levels = new List<int>(); 
+	
+	
+
+	} 
+
+	// Defined in table: Balls
+	
+	public partial class BallsDefine
+	{
+	
+		
+		/// <summary> 
+		/// 实体ID
+		/// </summary>
+		public int EntityId = 0; 
+		
+		/// <summary> 
+		/// 小球名称
+		/// </summary>
+		public string BallName = ""; 
+		
+		/// <summary> 
+		/// collider半径
+		/// </summary>
+		public float ColliderRadius = 0f; 
+		
+		/// <summary> 
+		/// 小球材质路径
+		/// </summary>
+		public string MaterialResPath = ""; 
 	
 	
 

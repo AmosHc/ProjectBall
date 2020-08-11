@@ -1,8 +1,10 @@
+using table;
+
 public class Agency : Entity
 {
-    public override void Init(SceneUnit unit)
+    public override void Init(SceneUnit unit,EntityTemplateDefine config)
     {
-        base.Init(unit);
+        base.Init(unit,config);
         
     }
 }

@@ -702,7 +702,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mReferenceResolution: {x: 1624, y: 750}
-  screenPriority: 15
+  screenPriority: 10
   mUseMask: 0
   mAlwaysShow: 0
   mHideOtherScreenWhenThisOnTop: 0

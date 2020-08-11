@@ -10,13 +10,12 @@ public enum EComponentType
 
 public class SceneUnit : PoolItemBase
 {
-    private CapsuleCollider _collider;
-    private Rigidbody _rigidbody;
     private AudioSource _audioSource;
     private GameObject _root;
     private Transform _thisTrans;
+    
     private int _Id;
-    private bool _isPlayer;
+    
     private bool _isStatic;
     private bool _isTrigger = false;
 
@@ -30,12 +29,6 @@ public class SceneUnit : PoolItemBase
     {
         get => _root;
         set => _root = value;
-    }
-
-    public AudioSource AudioSource
-    {
-        get => _audioSource;
-        set => _audioSource = value;
     }
 
     public virtual void Init(int uniID)
@@ -67,30 +60,5 @@ public class SceneUnit : PoolItemBase
         
         ThisTrans = root.transform;
         _root = root;
-    }
-
-//    public void SetIsPlayer()
-//    {
-//        _isPlayer = true;
-//        
-//        _collider = gameObject.GetComponent<CapsuleCollider>();
-//        _rigidbody = gameObject.GetComponent<Rigidbody>();
-//        _name = gameObject.name;
-//    }
-//
-//    public void SetIsNPC(string name = "")
-//    {
-//        _isNpc = true;
-//        _audioSource = gameObject.GetComponent<AudioSource>();
-//        _audioSource.mute = true;
-//        _collider = gameObject.GetComponent<CapsuleCollider>();
-//        _rigidbody = gameObject.GetComponent<Rigidbody>();
-//        _name = name;
-//    }
-
-    public bool IsPlayer
-    {
-        get => _isPlayer;
-        set => _isPlayer = value;
     }
 }

@@ -11,6 +11,7 @@ tabtoy.exe ^
 ./Excels/Globals.xlsx ^
 ./Excels/EntityTemplate.xlsx ^
 ./Excels/ThemeChooser.xlsx ^
+./Excels/Balls.xlsx ^
 ./Excels/Levels.xlsx ^
 ./Excels/Agencys.xlsx
 

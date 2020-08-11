@@ -4,7 +4,7 @@
 local tab = {
 	EntityTemplate = {
 		{ EntityId = 1, EntityName = "球", ResPath = "Sprite/GameProtagonists/Ball", EntityType = 0 	},
-		{ EntityId = 2, EntityName = "幸运星", ResPath = "Sprite/GameItem/Star", EntityType = 2 	},
+		{ EntityId = 2, EntityName = "幸运星", ResPath = "Sprite/GameItems/Star", EntityType = 2 	},
 		{ EntityId = 3, EntityName = "棒子", ResPath = "Sprite/GameAgencys/Line", EntityType = 1 	},
 		{ EntityId = 4, EntityName = "摩天轮", ResPath = "Sprite/GameAgencys/FerrisWheel", EntityType = 1 	},
 		{ EntityId = 5, EntityName = "楼梯哒哒哒", ResPath = "Sprite/GameAgencys/Stairs", EntityType = 1 	}
@@ -14,6 +14,10 @@ local tab = {
 		{ index = 1, ThemeName = "这波我无敌", IconUrl = "url", levels = { 1, 2, 3, 4, 5 } 	},
 		{ index = 2, ThemeName = "这波我真棒", IconUrl = "url", levels = { 6, 7, 8, 9, 10 } 	},
 		{ index = 3, ThemeName = "这波我不行", IconUrl = "url", levels = { 11, 12, 13, 14, 15 } 	}
+	}, 
+
+	Balls = {
+		{ EntityId = 1, BallName = "乒乓球", ColliderRadius = 0.25, MaterialResPath = "Material/Game/Ball/PingPong" 	}
 	}, 
 
 	Levels = {
@@ -53,6 +57,12 @@ end
 tab.ThemeChooserByindex = {}
 for _, rec in pairs(tab.ThemeChooser) do
 	tab.ThemeChooserByindex[rec.index] = rec
+end
+
+-- EntityId
+tab.BallsByEntityId = {}
+for _, rec in pairs(tab.Balls) do
+	tab.BallsByEntityId[rec.EntityId] = rec
 end
 
 -- LevelID

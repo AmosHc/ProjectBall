@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Win32;
-using ProjectBall.View;
 
 public class UIConfigItem
 {
@@ -46,4 +45,5 @@ public class UIConfig
     public static UIConfigItem ThemeChooser = new UIConfigItem("ThemeChooser","ThemeChooserUI",typeof(ThemeChooserUI)); //一级选关
     public static UIConfigItem SelectLevelUI = new UIConfigItem("SelectLevel/SelectLevel","SelectLevelUI",typeof(SelectLevelUI)); //二级选关
     public static UIConfigItem GameUI = new UIConfigItem("Game/Game","GameUI",typeof(GameUI)); //游戏
+    public static UIConfigItem FailUI = new UIConfigItem("Fail","FailUI",typeof(FailUI)); //游戏
 }

@@ -3,9 +3,7 @@ using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 using Utility;
 
-namespace ProjectBall.View
-{
-    public class GameEditorSubUI : SubScreenBase
+public class GameEditorSubUI : SubScreenBase
     {
         private int _selectAgencyID;
         private GameEditorSubCtrl _ctrl;
@@ -27,15 +25,14 @@ namespace ProjectBall.View
 
         protected override void OnShow()
         {
-            ResourcesMgr.GetInstance()
-                .LoadAsset(GameUIManager.UI_RES_PREFIX + "Game/btnOrganItem", InitEditorAgencyList);
+            ResourcesMgr.GetInstance().LoadAsset<GameObject>(GameUIManager.UI_RES_PREFIX + "Game/btnOrganItem", InitEditorAgencyList);
         }
 
         private void InitEditorAgencyList(GameObject obj)
         {
             if (obj != null)
             {
-                CommonUtility.RefreshList(_ctrl.rectListOrganEditor, obj, ((OpenGameUIParam)_selfParam).LevelsDefine.Agencys,ListItemRender);
+                CommonUtility.RefreshList(_ctrl.rectListOrganEditor, obj, ((LevelInfoParam)_selfParam).LevelsCfg.Agencys,ListItemRender);
             }
             else
             {
@@ -71,8 +68,7 @@ namespace ProjectBall.View
 
         private void OnClickStartGame()
         {
-            var levelCfg = ((OpenGameUIParam) _selfParam).LevelsDefine;
+            var levelCfg = ((LevelInfoParam) _selfParam).LevelsCfg;
             EntityManager.GetInstance().CreateEntity<Ball>(Const.PlayBallID, new Vector3(levelCfg.SpawnPoint.X,levelCfg.SpawnPoint.Y), Quaternion.identity);
         }
     }
-}

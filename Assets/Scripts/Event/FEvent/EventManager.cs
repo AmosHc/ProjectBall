@@ -9,5 +9,7 @@ public class EventManager
     public static FEvent<EUICareAboutMoneyType[]> OnMoneyTypeChange = new FEvent<EUICareAboutMoneyType[]>();   //货币栏显示变化
 
     public static FEvent<int,int> ScreenResolutionEvt = new FEvent<int,int>();   //分辨率变化适配
+    
+    public static FEvent OnGameOver = new FEvent();//游戏失败
 
 }

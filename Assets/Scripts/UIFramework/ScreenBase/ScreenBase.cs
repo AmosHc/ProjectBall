@@ -32,7 +32,7 @@ public class ScreenBase : UIBase
 
     public void StartLoad()
     {
-        ResourcesMgr.GetInstance().LoadAsset(_uiRes, PanelLoadComplete);
+        ResourcesMgr.GetInstance().LoadAsset<GameObject>(_uiRes, PanelLoadComplete);
     }
 
     // 资源加载完成
@@ -65,8 +65,8 @@ public class ScreenBase : UIBase
         // 注册适配监听事件
         _uiCtrl.AutoRelease(EventManager.ScreenResolutionEvt.Subscribe(UIAdapt));
 
-        if (_uiCtrl.mUseMask)
-            MaskScreenManager.GetInstance().Show(this);
+        if (_uiCtrl.mUseMask || _uiCtrl.mIsPopup || _uiCtrl.mIsModelWindow)
+            MaskScreenManager.GetInstance().Show(this,_uiCtrl);
     }
 
     // 更新UI的层级
@@ -80,8 +80,8 @@ public class ScreenBase : UIBase
 
         _uiCtrl.ctrlCanvas.pixelPerfect = true;
         _uiCtrl.ctrlCanvas.overrideSorting = true;
-        _uiCtrl.ctrlCanvas.sortingLayerID = (int)_uiCtrl.screenPriority;
         _sortingLayer = (int)_uiCtrl.screenPriority;
+        _uiCtrl.ctrlCanvas.sortingLayerID = _sortingLayer;
         _uiCtrl.ctrlCanvas.sortingOrder = _openOrder;
     }
 

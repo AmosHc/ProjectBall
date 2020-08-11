@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using table;
 using Utility;
 
-namespace ProjectBall.View
-{
-    public class ThemechooserParam : UIOpenScreenParameterBase
+public class ThemechooserParam : UIOpenScreenParameterBase
     {
         private string _titleName;
         private List<int> _levels;
@@ -89,4 +87,3 @@ namespace ProjectBall.View
             GameUIManager.GetInstance().OpenUI(UIConfig.SelectLevelUI,param);
         }
     }
-}
