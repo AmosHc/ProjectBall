@@ -1,8 +1,26 @@
+using System.Collections.Generic;
 using table;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;
 
+public class SelectLevelParam : UIOpenScreenParameterBase
+{
+    private string _titleName;
+    private List<int> _levels;
+
+    public string TitleName
+    {
+        get => _titleName;
+        set => _titleName = value;
+    }
+
+    public List<int> Levels
+    {
+        get => _levels;
+        set => _levels = value;
+    }
+}
 public class SelectLevelUI : ScreenBase
 {
     private SelectLevelCtrl _ctrl;
@@ -23,7 +41,7 @@ public class SelectLevelUI : ScreenBase
 
     public override void OnShow()
     {
-        _ctrl.txtTitle.text = ((ThemechooserParam) _selfParam).TitleName;
+        _ctrl.txtTitle.text = ((SelectLevelParam) _selfParam).TitleName;
         ResourcesMgr.GetInstance().LoadAsset<GameObject>(GameUIManager.UI_RES_PREFIX+"SelectLevel/btnLevel",InitLevels);
     }
 
@@ -31,7 +49,7 @@ public class SelectLevelUI : ScreenBase
     {
         if (_selfParam == null) 
             return;
-        CommonUtility.RefreshList(_ctrl.groupLevels.transform, obj, ((ThemechooserParam) _selfParam).Levels,ListItemRender);
+        CommonUtility.RefreshList(_ctrl.groupLevels.transform, obj, ((SelectLevelParam) _selfParam).Levels,ListItemRender);
     }
 
     private void ListItemRender(int i,Transform item ,int levelID)

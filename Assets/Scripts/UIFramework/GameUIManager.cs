@@ -81,9 +81,8 @@ public class GameUIManager : MonoSingleton<GameUIManager>
             sb = (ScreenBase) Activator.CreateInstance(uiCfg.UiType, UI_RES_PREFIX + uiCfg.UiResPath, uiCfg.UiName, param);//界面是唯一的，单例
             //ui:Show() 同步放这没问题，异步的话这个会在Create之前，所以需要换个位置
             _typeScreens.Add(uiCfg.UiType, sb);
-            sb.SetOpenOrder(_uiOpenOrder); // 设置打开序号
         }
-
+        sb.SetOpenOrder(_uiOpenOrder); // 设置打开序号
         // 处理最上层界面
         if (sb.CtrlBase.mHideOtherScreenWhenThisOnTop)
         {
@@ -199,7 +198,7 @@ public class GameUIManager : MonoSingleton<GameUIManager>
     {
         this.SortUIOrder();
         // 先找到第一个控制的UI层
-        int index = 0;
+        int index = -1;
 
         for (int i = 0; i < _sortTemp.Count; i++)
         {
@@ -213,12 +212,11 @@ public class GameUIManager : MonoSingleton<GameUIManager>
         }
 
         // 如果没有找到 可能的情况是就是关闭了最上层界面 所以现在最上层的应该是空的
-        if (index == 0)
+        if (index == -1)
         {
             for (int i = 0; i < _sortTemp.Count; i++)
             {
                 var tempC = _sortTemp[i];
-                // 找到第一个需要被隐藏的界面 隐藏就好
                 if (!tempC.CtrlBase.ctrlCanvas.enabled)
                 {
                     tempC.CtrlBase.ctrlCanvas.enabled = true;

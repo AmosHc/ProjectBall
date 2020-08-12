@@ -41,7 +41,6 @@ public class MapSceneManager : MonoSingleton<MapSceneManager>
         SceneUnit u = SceneUnitPoolManager.GetInstance().Spawn();
 
         u.gameObject.name = "Ball";
-        Debug.Log(position);
         u.transform.position = position;
         u.transform.rotation = rotation;
         u.gameObject.layer = LayerMask.NameToLayer("Ball");
