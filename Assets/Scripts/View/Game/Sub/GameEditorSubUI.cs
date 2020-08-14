@@ -64,6 +64,8 @@ public class GameEditorSubUI : SubScreenBase
             {
                 EntityManager.GetInstance().CreateEntity<Agency>(agencyCfg.EntityId, touchPosInWorld, Quaternion.identity);
             }
+
+            _selectAgencyID = -1;
         }
 
         private void OnClickStartGame()

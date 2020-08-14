@@ -36,7 +36,7 @@ public class SelectLevelUI : ScreenBase
 
     public override void BindAction()
     {
-        AddOnClickListener(_ctrl.btnClose,Close);
+        AddOnClickListener(_ctrl.btnClose,OnOpenThemeChooserUI);
     }
 
     public override void OnShow()
@@ -67,5 +67,9 @@ public class SelectLevelUI : ScreenBase
         GameUIManager.GetInstance().OpenUI(UIConfig.GameUI,param);
     }
     //GameConfigManager.GetInstance().GameConfig.GetLevelsByLevelID();
-        
+
+    public void OnOpenThemeChooserUI()
+    {
+        GameUIManager.GetInstance().OpenUI(UIConfig.ThemeChooser);
+    }
 }

@@ -138,9 +138,25 @@ namespace table
 
             return def;
         }
+		Dictionary<int, AgencysDefine> _AgencysByEntityId = new Dictionary<int, AgencysDefine>();
+        public AgencysDefine GetAgencysByEntityId(int EntityId, AgencysDefine def = default(AgencysDefine))
+        {
+            AgencysDefine ret;
+            if ( _AgencysByEntityId.TryGetValue( EntityId, out ret ) )
+            {
+                return ret;
+            }
+			
+			if ( def == default(AgencysDefine) )
+			{
+				TableLogger.ErrorLine("GetAgencysByEntityId failed, EntityId: {0}", EntityId);
+			}
+
+            return def;
+        }
 		
 		public string GetBuildID(){
-			return "0fe5bf6021a2f59afb37c95acdc4c246";
+			return "211683e30b6ebbd56932095a32bc8d43";
 		}
 	
 		#endregion
@@ -238,6 +254,8 @@ namespace table
 				var element = ins.Agencys[i];
 				
 				ins._AgencysByID.Add(element.ID, element);
+				
+				ins._AgencysByEntityId.Add(element.EntityId, element);
 				
 			}
 			
@@ -554,14 +572,14 @@ namespace table
 						ins.ID = reader.ReadInt32();
                 	}
                 	break; 
-                	case 0x60001:
-                	{
-						ins.AgencyName = reader.ReadString();
-                	}
-                	break; 
-                	case 0x10002:
+                	case 0x10001:
                 	{
 						ins.EntityId = reader.ReadInt32();
+                	}
+                	break; 
+                	case 0x60002:
+                	{
+						ins.AgencyName = reader.ReadString();
                 	}
                 	break; 
                 	case 0x90003:
@@ -594,6 +612,7 @@ namespace table
 				_BallsByEntityId.Clear(); 
 				_LevelsByLevelID.Clear(); 
 				_AgencysByID.Clear(); 
+				_AgencysByEntityId.Clear(); 
 		}
 		#endregion
 	
@@ -790,14 +809,14 @@ namespace table
 		public int ID = 0; 
 		
 		/// <summary> 
-		/// 机关名称
-		/// </summary>
-		public string AgencyName = ""; 
-		
-		/// <summary> 
 		/// 关联的实体Id
 		/// </summary>
 		public int EntityId = 0; 
+		
+		/// <summary> 
+		/// 机关名称
+		/// </summary>
+		public string AgencyName = ""; 
 		
 		/// <summary> 
 		/// 最大缩放参数

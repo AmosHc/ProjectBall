@@ -39,9 +39,9 @@ local tab = {
 	}, 
 
 	Agencys = {
-		{ ID = 1, AgencyName = "棒子", EntityId = 3, ScaleMax = { X= 10, Y= 10, Z= 10 }, ScaleMin = { X= 1, Y= 1, Z= 1 } 	},
-		{ ID = 2, AgencyName = "摩天轮", EntityId = 4, ScaleMax = { X= 10, Y= 10, Z= 11 }, ScaleMin = { X= 1, Y= 1, Z= 2 } 	},
-		{ ID = 3, AgencyName = "楼梯哒哒哒", EntityId = 5, ScaleMax = { X= 10, Y= 10, Z= 12 }, ScaleMin = { X= 1, Y= 1, Z= 3 } 	}
+		{ ID = 1, EntityId = 3, AgencyName = "棒子", ScaleMax = { X= 10, Y= 10, Z= 10 }, ScaleMin = { X= 1, Y= 1, Z= 1 } 	},
+		{ ID = 2, EntityId = 4, AgencyName = "摩天轮", ScaleMax = { X= 10, Y= 10, Z= 11 }, ScaleMin = { X= 1, Y= 1, Z= 2 } 	},
+		{ ID = 3, EntityId = 5, AgencyName = "楼梯哒哒哒", ScaleMax = { X= 10, Y= 10, Z= 12 }, ScaleMin = { X= 1, Y= 1, Z= 3 } 	}
 	}
 
 }
@@ -75,6 +75,12 @@ end
 tab.AgencysByID = {}
 for _, rec in pairs(tab.Agencys) do
 	tab.AgencysByID[rec.ID] = rec
+end
+
+-- EntityId
+tab.AgencysByEntityId = {}
+for _, rec in pairs(tab.Agencys) do
+	tab.AgencysByEntityId[rec.EntityId] = rec
 end
 
 tab.Enum = {

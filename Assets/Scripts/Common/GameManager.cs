@@ -12,5 +12,7 @@ public class GameManager : MonoSingleton<GameManager>
         SceneUnitPoolManager.GetInstance().Create();
         GameUIManager.GetInstance().Create();
         EntityManager.GetInstance().Create();
+        ControllerManager.GetInstance().Create();
+        Timers.GetInstance().Create();
     }
 }

@@ -46,7 +46,7 @@ public class ThemeChooserUI : ScreenBase
         AddOnClickListener(_selfCtrl.btnPrev, OnPreviousPageClick);
         AddOnClickListener(_selfCtrl.btnNext, OnNextPageClick);
         AddOnClickListener(_selfCtrl.btnJumpTheme, OnOpenJumpTheme);
-        AddOnClickListener(_selfCtrl.btnClose,Close);
+        AddOnClickListener(_selfCtrl.btnClose,OnReturnMenuUI);
     }
 
     private void OnPreviousPageClick()
@@ -67,5 +67,10 @@ public class ThemeChooserUI : ScreenBase
         param.TitleName = _selfCtrl.title.text;
         param.Levels = _levels;
         GameUIManager.GetInstance().OpenUI(UIConfig.SelectLevelUI,param);
+    }
+
+    private void OnReturnMenuUI()
+    {
+        GameUIManager.GetInstance().Reset();
     }
 }

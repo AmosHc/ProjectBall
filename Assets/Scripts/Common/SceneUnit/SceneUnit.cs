@@ -13,6 +13,8 @@ public class SceneUnit : PoolItemBase
     private AudioSource _audioSource;
     private GameObject _root;
     private Transform _thisTrans;
+    private int _layer;
+    
     
     private int _Id;
     
@@ -29,6 +31,11 @@ public class SceneUnit : PoolItemBase
     {
         get => _root;
         set => _root = value;
+    }
+
+    public int Layer
+    {
+        get => _layer;
     }
 
     public virtual void Init(int uniID)
@@ -60,5 +67,12 @@ public class SceneUnit : PoolItemBase
         
         ThisTrans = root.transform;
         _root = root;
+    }
+    
+    public void SetLayer(int layer)
+    {
+        gameObject.layer = layer;
+        _root.layer = layer;
+        _layer = layer;
     }
 }

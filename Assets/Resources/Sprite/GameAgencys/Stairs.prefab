@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7399029512804140260}
   - component: {fileID: 2225726956638572565}
   - component: {fileID: 8815805762712950441}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: item1 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 8706342206005794870}
   - component: {fileID: 8205306247877488154}
   - component: {fileID: 8292784693924340481}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: item1 (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,7 +227,7 @@ GameObject:
   - component: {fileID: 1354331717231223152}
   - component: {fileID: 3403535857019801448}
   - component: {fileID: 545292308108731092}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: item1 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -334,8 +334,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8035084039143171078}
   - component: {fileID: 4343359510895565297}
-  m_Layer: 0
-  m_Name: stairs
+  m_Layer: 9
+  m_Name: Stairs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -425,7 +425,7 @@ GameObject:
   - component: {fileID: 7251129200103515540}
   - component: {fileID: 3819663534106074813}
   - component: {fileID: 4780458066899720659}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: item1 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -533,7 +533,7 @@ GameObject:
   - component: {fileID: 5771236992945219677}
   - component: {fileID: 4508960217597003232}
   - component: {fileID: 4624239304824706173}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: item1 (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -641,7 +641,7 @@ GameObject:
   - component: {fileID: 46191379942801902}
   - component: {fileID: 1876609334661654612}
   - component: {fileID: 7413567963507267467}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: item1 (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -749,7 +749,7 @@ GameObject:
   - component: {fileID: 4776282200399821271}
   - component: {fileID: 4911016246603945149}
   - component: {fileID: 3879362707273470008}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: item1 (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -857,7 +857,7 @@ GameObject:
   - component: {fileID: 920843045348820211}
   - component: {fileID: 6037539724773983289}
   - component: {fileID: 245488943848864294}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: item1 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -965,7 +965,7 @@ GameObject:
   - component: {fileID: 770451617282408479}
   - component: {fileID: 1752953221944882370}
   - component: {fileID: 8564139701058009042}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: item1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

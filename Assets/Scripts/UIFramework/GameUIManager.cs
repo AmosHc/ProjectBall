@@ -275,7 +275,8 @@ public class GameUIManager : MonoSingleton<GameUIManager>
     //返回登陆界面时，重置常驻UI的状态
     public void Reset()
     {
-
+        CloseAllUI();
+        GameUIManager.GetInstance().OpenUI(UIConfig.MainMenu);
     }
 
 

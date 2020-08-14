@@ -43,7 +43,7 @@ public class MapSceneManager : MonoSingleton<MapSceneManager>
         u.gameObject.name = "Ball";
         u.transform.position = position;
         u.transform.rotation = rotation;
-        u.gameObject.layer = LayerMask.NameToLayer("Ball");
+        u.SetLayer(LayerMask.NameToLayer("Ball"));
         u.Init(uniID);
         return u;
     }
@@ -55,7 +55,7 @@ public class MapSceneManager : MonoSingleton<MapSceneManager>
         u.gameObject.name = "Agency";
         u.transform.position = position;
         u.transform.rotation = rotation;
-        u.gameObject.layer = LayerMask.NameToLayer("Agency");
+        u.SetLayer(LayerMask.NameToLayer("Agency"));
         u.Init(uniID);
         return u;
     }
@@ -68,7 +68,7 @@ public class MapSceneManager : MonoSingleton<MapSceneManager>
         u.gameObject.name = "Star";
         u.transform.position = position;
         u.transform.rotation = rotation;
-        u.gameObject.layer = LayerMask.NameToLayer("Star");
+        u.SetLayer(LayerMask.NameToLayer("Star"));
         u.Init(uniID);
         return u;
     }

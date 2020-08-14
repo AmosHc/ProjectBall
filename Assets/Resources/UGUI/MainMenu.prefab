@@ -703,9 +703,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mReferenceResolution: {x: 1624, y: 750}
   screenPriority: 10
+  mIsPopup: 0
+  mIsModelWindow: 0
   mUseMask: 0
   mAlwaysShow: 0
-  mHideOtherScreenWhenThisOnTop: 0
+  mHideOtherScreenWhenThisOnTop: 1
   mBCareAboutMoney: 0
   MoneyType: 
   btnThemeChooser: {fileID: 2768555158880315103}
