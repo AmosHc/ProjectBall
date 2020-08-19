@@ -13,6 +13,7 @@ public class GameManager : MonoSingleton<GameManager>
         GameUIManager.GetInstance().Create();
         EntityManager.GetInstance().Create();
         ControllerManager.GetInstance().Create();
+        AgencyManager.GetInstance().Create();
         Timers.GetInstance().Create();
     }
 }
